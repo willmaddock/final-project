@@ -1,0 +1,27 @@
+<h1>Access Point Details</h1>
+
+<p>
+  <strong>Location:</strong>
+  <%= @access_point.location %>
+</p>
+
+<p>
+  <strong>Access Level:</strong>
+  <%= @access_point.access_level %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @access_point.description %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @access_point.status ? 'Active' : 'Inactive' %>
+</p>
+
+<div>
+  <%= link_to 'Edit this access point', edit_access_point_path(@access_point), class: 'btn btn-secondary' %> |
+  <%= link_to 'Back to Access Points', access_points_path, class: 'btn btn-light' %>
+  <%= button_to 'Destroy this access point', @access_point, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+</div>

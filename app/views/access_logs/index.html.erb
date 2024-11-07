@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Access logs</h1>
+
+<div id="access_logs">
+  <% @access_logs.each do |access_log| %>
+    <%= render access_log %>
+    <p>
+      <%= link_to "Show this access log", access_log %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New access log", new_access_log_path %>

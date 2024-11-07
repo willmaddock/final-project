@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  access_point: one
+  timestamp: 2024-11-01 01:47:08
+  successful: false
+
+two:
+  user: two
+  access_point: two
+  timestamp: 2024-11-01 01:47:08
+  successful: false

@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  username: MyString
+  password_hash: MyString
+  full_name: MyString
+  email: MyString
+  role: MyString
+  access_level: 1
+  last_login: 2024-11-01 00:46:48
+  status: false
+
+two:
+  username: MyString
+  password_hash: MyString
+  full_name: MyString
+  email: MyString
+  role: MyString
+  access_level: 1
+  last_login: 2024-11-01 00:46:48
+  status: false

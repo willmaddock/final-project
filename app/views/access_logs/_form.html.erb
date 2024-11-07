@@ -1,0 +1,37 @@
+<%= form_with(model: access_log) do |form| %>
+  <% if access_log.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(access_log.errors.count, "error") %> prohibited this access_log from being saved:</h2>
+
+      <ul>
+        <% access_log.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :user_id, style: "display: block" %>
+    <%= form.text_field :user_id %>
+  </div>
+
+  <div>
+    <%= form.label :access_point_id, style: "display: block" %>
+    <%= form.text_field :access_point_id %>
+  </div>
+
+  <div>
+    <%= form.label :timestamp, style: "display: block" %>
+    <%= form.datetime_field :timestamp %>
+  </div>
+
+  <div>
+    <%= form.label :successful, style: "display: block" %>
+    <%= form.check_box :successful %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

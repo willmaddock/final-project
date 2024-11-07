@@ -1,0 +1,5 @@
+<h1><%= @access_point.new_record? ? 'New Access Point' : 'Edit Access Point' %></h1>
+
+<%= render "form", access_point: @access_point %>
+
+<%= link_to "Back to Access Points", access_points_path, class: 'btn btn-light' %>
