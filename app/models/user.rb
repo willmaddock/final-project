@@ -15,7 +15,7 @@ class User < ApplicationRecord
   # Establish the relationship with Profile
   has_one :profile
 
-  # Optional: Add validations
+  # Validations
   validates :email, presence: true, uniqueness: true
   validates :username, presence: true, uniqueness: true
 

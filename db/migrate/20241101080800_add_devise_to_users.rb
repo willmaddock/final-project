@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class AddDeviseToUsers < ActiveRecord::Migration[7.1]
-  def self.up
+  def up
     change_table :users do |t|
       ## Database authenticatable
-      # Comment or remove these lines if they already exist
+      # Remove or comment out these lines if they already exist in another migration
       # t.string :email,              null: false, default: ""
       # t.string :encrypted_password, null: false, default: ""
 
@@ -38,14 +38,13 @@ class AddDeviseToUsers < ActiveRecord::Migration[7.1]
       # t.timestamps null: false
     end
 
-    # Add indexes for email and reset_password_token only if the columns exist
-    add_index :users, :email, unique: true if column_exists?(:users, :email)
+    # Add indexes for new columns only
     add_index :users, :reset_password_token, unique: true if column_exists?(:users, :reset_password_token)
     # add_index :users, :confirmation_token, unique: true if column_exists?(:users, :confirmation_token)
     # add_index :users, :unlock_token, unique: true if column_exists?(:users, :unlock_token)
   end
 
-  def self.down
+  def down
     # Specify the removal of fields only if they exist.
     change_table :users do |t|
       t.remove :reset_password_token if column_exists?(:users, :reset_password_token)
@@ -54,8 +53,7 @@ class AddDeviseToUsers < ActiveRecord::Migration[7.1]
       # Remove other fields if needed
     end
 
-    # Handle indexes
-    remove_index :users, :email if index_exists?(:users, :email)
+    # Remove indexes only if they were created in this migration
     remove_index :users, :reset_password_token if index_exists?(:users, :reset_password_token)
     # remove_index :users, :confirmation_token if index_exists?(:users, :confirmation_token)
     # remove_index :users, :unlock_token if index_exists?(:users, :unlock_token)
