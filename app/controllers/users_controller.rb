@@ -4,13 +4,11 @@ class UsersController < ApplicationController
 
   # GET /users or /users.json
   def index
-    begin
-      per_page = (params[:per_page] || 10).to_i # Ensure integer conversion
-      @users = User.page(params[:page]).per(per_page)
-    rescue StandardError => e
-      flash.now[:alert] = "Failed to load users: #{e.message}"
-      @users = []  # Fallback to an empty array to prevent errors in the view
-    end
+    per_page = (params[:per_page].presence || 10).to_i  # Convert to integer and use default if not present
+    @users = User.page(params[:page]).per(per_page)
+  rescue StandardError => e
+    flash.now[:alert] = "Failed to load users: #{e.message}"
+    @users = []  # Fallback to an empty array to prevent errors in the view
   end
 
   # GET /users/1 or /users/1.json
@@ -30,7 +28,6 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
-    # Handle password directly using Devise
     if params[:user][:password].present?
       @user.password = params[:user][:password]
     end
@@ -49,13 +46,12 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1 or /users/1.json
   def update
-    # Update only if the password is provided; otherwise, retain the existing password
     if params[:user][:password].present?
-      @user.password = params[:user][:password] # Use Devise's built-in methods
+      @user.password = params[:user][:password]
     end
 
     respond_to do |format|
-      if @user.update(user_params.except(:password_hash)) # Remove password_hash if present
+      if @user.update(user_params.except(:password_hash))
         flash[:notice] = "User was successfully updated."
         format.html { redirect_to @user }
         format.json { render :show, status: :ok, location: @user }
@@ -78,33 +74,23 @@ class UsersController < ApplicationController
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
   def set_user
     @user = User.find(params[:id])
   end
 
-  # Ensure that only admin or logistics manager can delete user details
   def authorize_user!
     case action_name
     when 'new', 'create'
-      unless current_user.can_create_items?
-        redirect_to root_path, alert: "You do not have permission to perform this action."
-      end
+      redirect_to root_path, alert: "You do not have permission to perform this action." unless current_user.can_create_items?
     when 'edit', 'update'
-      unless current_user.can_edit_items?
-        redirect_to root_path, alert: "You do not have permission to perform this action."
-      end
+      redirect_to root_path, alert: "You do not have permission to perform this action." unless current_user.can_edit_items?
     when 'destroy'
-      unless current_user.can_delete_items?
-        redirect_to root_path, alert: "You do not have permission to perform this action."
-      end
+      redirect_to root_path, alert: "You do not have permission to perform this action." unless current_user.can_delete_items?
     else
-      # Default case for show and index actions where all roles have access
       return true
     end
   end
 
-  # Only allow a list of trusted parameters through.
   def user_params
     params.require(:user).permit(:username, :full_name, :email, :role, :access_level, :last_login, :status)
   end
