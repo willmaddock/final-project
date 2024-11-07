@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Name</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Access Management App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
-  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <!-- Load Bootstrap CSS from CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/5hb0c9r4j5n3K4t1QpL9I6tBXGpLTrDp53AwO2" crossorigin="anonymous">
+
+  <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
 </head>
 
 <body>
+<%= render 'layouts/header' %>
+
 <% if notice %>
   <p style="color: green"><%= notice %></p>
 <% end %>
@@ -18,6 +23,12 @@
   <p style="color: red"><%= alert %></p>
 <% end %>
 
-<%= yield %>
+<div class="container mt-4">
+  <%= yield %>
+</div>
+
+<!-- Load Popper.js and Bootstrap JS from CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gyb/43iD1pF8i4w0K4Xt4p4iV/pjZEX3LDgXgq6W2YtGrEGhK" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-wX6tT0oOzZjST1AfCq6y9zLGjM8EuLRA5zpChcR1A/bp/v1r3BBFnLgtB6lC0o/e" crossorigin="anonymous"></script>
 </body>
 </html>

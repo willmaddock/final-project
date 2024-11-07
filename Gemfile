@@ -50,6 +50,9 @@ gem 'bootstrap', '~> 5.1.3'
 # Add Devise for authentication
 gem 'devise'
 
+# Add Kaminari for pagination
+gem 'kaminari'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ]

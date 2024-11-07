@@ -1,13 +1,12 @@
-<div id="<%= dom_id user %>">
+<div id="<%= dom_id user %>" class="user-details">
   <p>
     <strong>Username:</strong>
     <%= user.username %>
   </p>
 
-  <!-- Note: Displaying encrypted passwords is generally not recommended for security reasons -->
   <p>
-    <strong>Encrypted password:</strong>
-    <%= user.encrypted_password %> <!-- Updated from password_hash to encrypted_password -->
+    <strong>Password:</strong>
+    <em>Securely stored. Cannot be displayed.</em>
   </p>
 
   <p>
@@ -30,13 +29,15 @@
     <%= user.access_level %>
   </p>
 
-  <p>
-    <strong>Last login:</strong>
-    <%= user.last_login %>
-  </p>
+  <% if user.last_login.present? %>
+    <p>
+      <strong>Last login:</strong>
+      <%= user.last_login.strftime("%B %d, %Y at %I:%M %p") if user.last_login %>
+    </p>
+  <% end %>
 
   <p>
     <strong>Status:</strong>
-    <%= user.status %>
+    <%= user.status ? 'Active' : 'Inactive' %>
   </p>
 </div>

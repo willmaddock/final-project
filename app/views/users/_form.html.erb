@@ -1,57 +1,58 @@
 <%= form_with(model: user) do |form| %>
   <% if user.errors.any? %>
-    <div style="color: red">
+    <div class="alert alert-danger">
       <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
-
       <ul>
-        <% user.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+        <% user.errors.full_messages.each do |error| %>
+          <li><%= error %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :username, style: "display: block" %>
-    <%= form.text_field :username %>
+  <div class="mb-3">
+    <%= form.label :username, class: "form-label" %>
+    <%= form.text_field :username, class: "form-control" %>
   </div>
 
-  <div>
-    <%= form.label :password_hash, style: "display: block" %>
-    <%= form.text_field :password_hash %>
+  <div class="mb-3">
+    <%= form.label :password, class: "form-label" %>
+    <%= form.password_field :password, class: "form-control" %>
+    <small class="form-text text-muted">Leave blank if you do not want to change the password.</small>
   </div>
 
-  <div>
-    <%= form.label :full_name, style: "display: block" %>
-    <%= form.text_field :full_name %>
+  <div class="mb-3">
+    <%= form.label :full_name, class: "form-label" %>
+    <%= form.text_field :full_name, class: "form-control" %>
   </div>
 
-  <div>
-    <%= form.label :email, style: "display: block" %>
-    <%= form.text_field :email %>
+  <div class="mb-3">
+    <%= form.label :email, class: "form-label" %>
+    <%= form.text_field :email, class: "form-control" %>
   </div>
 
-  <div>
-    <%= form.label :role, style: "display: block" %>
-    <%= form.text_field :role %>
+  <div class="mb-3">
+    <%= form.label :role, class: "form-label" %>
+    <%= form.text_field :role, class: "form-control" %>
   </div>
 
-  <div>
-    <%= form.label :access_level, style: "display: block" %>
-    <%= form.number_field :access_level %>
+  <div class="mb-3">
+    <%= form.label :access_level, class: "form-label" %>
+    <%= form.number_field :access_level, class: "form-control" %>
   </div>
 
-  <div>
-    <%= form.label :last_login, style: "display: block" %>
-    <%= form.datetime_field :last_login %>
+  <div class="mb-3">
+    <%= form.label :last_login, class: "form-label" %>
+    <%= form.datetime_field :last_login, class: "form-control" %>
   </div>
 
-  <div>
-    <%= form.label :status, style: "display: block" %>
+  <div class="mb-3">
+    <%= form.label :status, class: "form-label" %>
     <%= form.check_box :status %>
+    <%= form.label :status, "Active?" %>
   </div>
 
   <div>
-    <%= form.submit %>
+    <%= form.submit class: "btn btn-primary" %>
   </div>
 <% end %>

@@ -4,7 +4,8 @@ class UsersController < ApplicationController
   # GET /users or /users.json
   def index
     begin
-      @users = User.all
+      per_page = (params[:per_page] || 10).to_i # Ensure integer conversion
+      @users = User.page(params[:page]).per(per_page)
     rescue StandardError => e
       flash.now[:alert] = "Failed to load users: #{e.message}"
       @users = []  # Fallback to an empty array to prevent errors in the view
@@ -28,6 +29,11 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
+    # Handle password hashing if a new password is provided
+    if params[:user][:password].present?
+      @user.password_hash = User.hash_password(params[:user][:password])
+    end
+
     respond_to do |format|
       if @user.save
         flash[:notice] = "User was successfully created."
@@ -42,8 +48,13 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1 or /users/1.json
   def update
+    # Update only if the password is provided; otherwise, retain the existing password
+    if params[:user][:password].present?
+      @user.password_hash = User.hash_password(params[:user][:password])
+    end
+
     respond_to do |format|
-      if @user.update(user_params)
+      if @user.update(user_params.except(:password_hash))
         flash[:notice] = "User was successfully updated."
         format.html { redirect_to @user }
         format.json { render :show, status: :ok, location: @user }
@@ -73,6 +84,6 @@ class UsersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def user_params
-    params.require(:user).permit(:username, :password_hash, :full_name, :email, :role, :access_level, :last_login, :status)
+    params.require(:user).permit(:username, :full_name, :email, :role, :access_level, :last_login, :status)
   end
 end

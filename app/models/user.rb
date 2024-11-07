@@ -19,5 +19,5 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   validates :username, presence: true, uniqueness: true
 
-  # Optional: Include any additional methods or scopes related to users
+  # Optional: You can add additional methods or scopes related to users here
 end
