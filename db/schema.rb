@@ -14,11 +14,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_01_174746) do
   create_table "access_logs", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "access_point_id", null: false
-    t.datetime "timestamp"
-    t.boolean "successful"
+    t.datetime "timestamp", null: false
+    t.boolean "successful", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["access_point_id", "timestamp"], name: "index_access_logs_on_access_point_id_and_timestamp"
     t.index ["access_point_id"], name: "index_access_logs_on_access_point_id"
+    t.index ["user_id", "timestamp"], name: "index_access_logs_on_user_id_and_timestamp"
     t.index ["user_id"], name: "index_access_logs_on_user_id"
   end
 

@@ -1,9 +1,15 @@
 class AccessLogsController < ApplicationController
-  before_action :set_access_log, only: %i[ show edit update destroy ]
+  before_action :set_access_log, only: %i[show edit update destroy]
+  before_action :authorize_access_log!, only: %i[new create edit update destroy]  # Authorization check for certain actions
 
   # GET /access_logs or /access_logs.json
   def index
-    @access_logs = AccessLog.all
+    per_page = (params[:per_page].presence || 10).to_i  # Convert to integer and use default if not present
+    @access_logs = AccessLog.page(params[:page]).per(per_page)  # Use pagination
+
+  rescue StandardError => e
+    flash.now[:alert] = "Failed to load access logs: #{e.message}"
+    @access_logs = []  # Fallback to an empty array to prevent errors in the view
   end
 
   # GET /access_logs/1 or /access_logs/1.json
@@ -58,13 +64,28 @@ class AccessLogsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_access_log
-      @access_log = AccessLog.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def access_log_params
-      params.require(:access_log).permit(:user_id, :access_point_id, :timestamp, :successful)
+  # Use callbacks to share common setup or constraints between actions.
+  def set_access_log
+    @access_log = AccessLog.find(params[:id])
+  end
+
+  # Authorization method to check user permissions for access logs
+  def authorize_access_log!
+    case action_name
+    when 'new', 'create'
+      redirect_to root_path, alert: "You do not have permission to perform this action." unless current_user.can_create_items?
+    when 'edit', 'update'
+      redirect_to root_path, alert: "You do not have permission to perform this action." unless current_user.can_edit_items?
+    when 'destroy'
+      redirect_to root_path, alert: "You do not have permission to perform this action." unless current_user.can_delete_items?
+    else
+      return true
     end
+  end
+
+  # Only allow a list of trusted parameters through.
+  def access_log_params
+    params.require(:access_log).permit(:user_id, :access_point_id, :timestamp, :successful)
+  end
 end
