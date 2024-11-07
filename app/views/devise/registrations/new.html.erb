@@ -31,6 +31,11 @@
     <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
   </div>
 
+  <div class="field">
+    <%= f.label :role, "Select Role" %>
+    <%= f.select :role, [['Shipping Agent', 'shipping_agent'], ['Viewer', 'viewer']], { include_blank: false }, class: "form-control" %>
+  </div>
+
   <div class="actions">
     <%= f.submit "Sign up", class: "btn btn-primary" %>
   </div>

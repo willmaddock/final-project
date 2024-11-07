@@ -3,27 +3,32 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   context 'validations' do
     it 'is valid with valid attributes' do
-      user = User.new(email: 'test@example.com', password: 'password')
+      user = User.new(username: 'testuser', email: 'test@example.com', password: 'password')
       expect(user).to be_valid
     end
 
     it 'is not valid without an email' do
-      user = User.new(email: nil, password: 'password')
+      user = User.new(username: 'testuser', email: nil, password: 'password')
       expect(user).to_not be_valid
     end
 
     it 'is not valid without a password' do
-      user = User.new(email: 'test@example.com', password: nil)
+      user = User.new(username: 'testuser', email: 'test@example.com', password: nil)
       expect(user).to_not be_valid
     end
 
     it 'is not valid with an improperly formatted email' do
-      user = User.new(email: 'invalid_email', password: 'password')
+      user = User.new(username: 'testuser', email: 'invalid_email', password: 'password')
       expect(user).to_not be_valid
     end
 
     it 'is not valid with a short password' do
-      user = User.new(email: 'test@example.com', password: 'short')
+      user = User.new(username: 'testuser', email: 'test@example.com', password: 'short')
+      expect(user).to_not be_valid
+    end
+
+    it 'is not valid without a username' do
+      user = User.new(username: nil, email: 'test@example.com', password: 'password')
       expect(user).to_not be_valid
     end
   end

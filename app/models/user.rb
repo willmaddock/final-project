@@ -18,6 +18,30 @@ class User < ApplicationRecord
   # Validations
   validates :email, presence: true, uniqueness: true
   validates :username, presence: true, uniqueness: true
+  validates :role, inclusion: { in: %w[shipping_agent viewer] } # Ensure only allowed roles can be assigned
 
-  # Optional: You can add additional methods or scopes related to users here
+  # Permission Methods
+  def can_create_items?
+    admin? || logistics_manager?  # Shipping agents cannot create items
+  end
+
+  def can_view_items?
+    viewer? || shipping_agent? || logistics_manager?
+  end
+
+  def can_edit_items?
+    admin? || editor? || logistics_manager?
+  end
+
+  def can_delete_items?
+    admin? || logistics_manager?
+  end
+
+  def can_request_access?
+    shipping_agent?
+  end
+
+  def can_audit_logs?
+    logistics_manager?
+  end
 end
