@@ -21,10 +21,12 @@ class ProfilesController < ApplicationController
   # GET /profiles/new
   def new
     @profile = Profile.new
+    @users = User.all # Load all users for selection
   end
 
   # GET /profiles/1/edit
   def edit
+    @users = User.all # Load all users for selection
   end
 
   # POST /profiles or /profiles.json

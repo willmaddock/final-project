@@ -12,7 +12,7 @@
 
   <div class="form-group">
     <%= form.label :user_id %>
-    <%= form.text_field :user_id, class: "form-control" %> <!-- User ID input -->
+    <%= form.collection_select :user_id, @users, :id, :username, prompt: "Select a User", class: "form-control" %>
   </div>
 
   <div class="form-group">
