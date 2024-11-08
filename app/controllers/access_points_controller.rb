@@ -1,9 +1,23 @@
 class AccessPointsController < ApplicationController
-  before_action :set_access_point, only: %i[ show edit update destroy ]
+  before_action :set_access_point, only: %i[show edit update destroy]
 
   # GET /access_points or /access_points.json
   def index
     @access_points = AccessPoint.all
+    @access_logs = AccessLog.page(params[:page]).per(10)  # Example: Fetch access logs for display
+  end
+
+  # GET /access_points
+  def index
+    per_page = (params[:per_page].presence || 10).to_i
+    @access_points = AccessPoint.page(params[:page]).per(per_page)
+
+    # Renders the `index` template located at `app/views/access_points/index.html.erb`
+    render 'index'
+  rescue StandardError => e
+    flash.now[:alert] = "Failed to load access points: #{e.message}"
+    @access_points = []
+    render 'index'  # Render the same template even in case of an error
   end
 
   # GET /access_points/1 or /access_points/1.json
@@ -49,22 +63,30 @@ class AccessPointsController < ApplicationController
 
   # DELETE /access_points/1 or /access_points/1.json
   def destroy
-    @access_point.destroy!
-
     respond_to do |format|
-      format.html { redirect_to access_points_path, status: :see_other, notice: "Access point was successfully destroyed." }
-      format.json { head :no_content }
+      if @access_point.destroy
+        format.html { redirect_to access_points_path, status: :see_other, notice: "Access point was successfully destroyed." }
+        format.json { head :no_content }
+      else
+        format.html { redirect_to access_point_path(@access_point), alert: "Access point could not be deleted due to dependent records." }
+        format.json { render json: { error: "Access point could not be deleted due to dependent records." }, status: :unprocessable_entity }
+      end
     end
+  rescue ActiveRecord::InvalidForeignKey => e
+    Rails.logger.error("Failed to delete access point: #{e.message}")
+    flash[:alert] = "Access point could not be deleted due to dependent records."
+    redirect_to access_points_path
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_access_point
-      @access_point = AccessPoint.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def access_point_params
-      params.require(:access_point).permit(:location, :access_level, :description, :status)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_access_point
+    @access_point = AccessPoint.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def access_point_params
+    params.require(:access_point).permit(:location, :access_level, :description, :status)
+  end
 end

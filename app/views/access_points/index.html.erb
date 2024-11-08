@@ -2,30 +2,42 @@
 
 <h1>Access Points</h1>
 
-<%= link_to 'New Access Point', new_access_point_path, class: 'btn btn-primary' %>
+<%= link_to 'New Access Point', new_access_point_path, class: 'btn btn-primary mb-3' %>
 
-<table class="table">
-  <thead>
-  <tr>
-    <th>Location</th>
-    <th>Access Level</th>
-    <th>Description</th>
-    <th>Status</th>
-    <th colspan="3"></th>
-  </tr>
-  </thead>
+<% if flash[:alert] %>
+  <div class="alert alert-danger"><%= flash[:alert] %></div>
+<% end %>
 
-  <tbody>
-  <% @access_points.each do |access_point| %>
+<% if flash[:notice] %>
+  <div class="alert alert-success"><%= flash[:notice] %></div>
+<% end %>
+
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
     <tr>
-      <td><%= access_point.location %></td>
-      <td><%= access_point.access_level %></td>
-      <td><%= access_point.description %></td>
-      <td><%= access_point.status ? 'Active' : 'Inactive' %></td>
-      <td><%= link_to 'Show', access_point %></td>
-      <td><%= link_to 'Edit', edit_access_point_path(access_point) %></td>
-      <td><%= link_to 'Destroy', access_point, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <th>Location</th>
+      <th>Access Level</th>
+      <th>Description</th>
+      <th>Status</th>
+      <th colspan="3" class="text-center">Actions</th>
     </tr>
-  <% end %>
-  </tbody>
-</table>
+    </thead>
+
+    <tbody>
+    <% @access_points.each do |access_point| %>
+      <tr>
+        <td><%= access_point.location %></td>
+        <td><%= access_point.access_level %></td>
+        <td><%= access_point.description %></td>
+        <td><%= access_point.status ? 'Active' : 'Inactive' %></td>
+        <td><%= link_to 'Show', access_point, class: 'btn btn-info' %></td>
+        <td><%= link_to 'Edit', edit_access_point_path(access_point), class: 'btn btn-warning' %></td>
+        <td><%= link_to 'Destroy', access_point, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= paginate @access_points %>

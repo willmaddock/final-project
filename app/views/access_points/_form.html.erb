@@ -12,22 +12,37 @@
 
   <div class="form-group">
     <%= form.label :location %>
-    <%= form.text_field :location, class: 'form-control' %>
+    <%= form.text_field :location, class: "form-control #{'is-invalid' if access_point.errors[:location].any?}", placeholder: 'Enter the location' %>
+    <% if access_point.errors[:location].any? %>
+      <div class="invalid-feedback">
+        <%= access_point.errors[:location].first %>
+      </div>
+    <% end %>
   </div>
 
   <div class="form-group">
     <%= form.label :access_level %>
-    <%= form.number_field :access_level, class: 'form-control' %>
+    <%= form.number_field :access_level, class: "form-control #{'is-invalid' if access_point.errors[:access_level].any?}", placeholder: 'Enter access level' %>
+    <% if access_point.errors[:access_level].any? %>
+      <div class="invalid-feedback">
+        <%= access_point.errors[:access_level].first %>
+      </div>
+    <% end %>
   </div>
 
   <div class="form-group">
     <%= form.label :description %>
-    <%= form.text_area :description, class: 'form-control' %>
+    <%= form.text_area :description, class: "form-control #{'is-invalid' if access_point.errors[:description].any?}", rows: 3, placeholder: 'Enter a description' %>
+    <% if access_point.errors[:description].any? %>
+      <div class="invalid-feedback">
+        <%= access_point.errors[:description].first %>
+      </div>
+    <% end %>
   </div>
 
-  <div class="form-group">
-    <%= form.label :status %>
-    <%= form.check_box :status %>
+  <div class="form-group form-check">
+    <%= form.check_box :status, class: 'form-check-input' %>
+    <%= form.label :status, 'Active', class: 'form-check-label' %>
   </div>
 
   <div class="form-group">
