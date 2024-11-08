@@ -45,12 +45,11 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1 or /users/1.json
   def update
-    if params[:user][:password].present?
-      @user.password = params[:user][:password]
-    end
+    # Update the password only if a new password is provided
+    @user.password = params[:user][:password] if params[:user][:password].present?
 
     respond_to do |format|
-      if @user.update(user_params.except(:password_hash))
+      if @user.update(user_params.except(:password)) # Exclude password unless explicitly provided
         flash[:notice] = "User was successfully updated."
         format.html { redirect_to @user }
         format.json { render :show, status: :ok, location: @user }
