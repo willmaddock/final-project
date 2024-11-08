@@ -40,7 +40,7 @@
   <!-- Dropdown for Access Level -->
   <div class="mb-3">
     <%= form.label :access_level, class: "form-label" %>
-    <%= form.select :access_level, options_for_select(['High', 'Medium', 'Low'], user.access_level), {}, class: "form-control" %>
+    <%= form.select :access_level, options_for_select(['1', '2', '3', '4', '5'], user.access_level), {}, class: "form-control" %>
   </div>
 
   <div class="mb-3">

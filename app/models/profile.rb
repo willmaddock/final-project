@@ -4,6 +4,10 @@ class Profile < ApplicationRecord
   # ActiveStorage for attaching an avatar image
   has_one_attached :avatar, dependent: :purge_later
 
+  # Ensure only one profile can exist per user
+  validates :user_id, uniqueness: true, presence: true
+
+  # Validations for other profile attributes
   validates :bio, presence: true
   validates :location, presence: true
   validate :acceptable_avatar # Validation for the avatar

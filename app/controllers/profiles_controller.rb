@@ -2,11 +2,20 @@ class ProfilesController < ApplicationController
   before_action :set_profile, only: %i[show edit update destroy]
 
   # GET /profiles or /profiles.json
+  # GET /profiles or /profiles.json
   def index
     per_page = (params[:per_page].presence || 10).to_i
     @profiles = Profile.page(params[:page]).per(per_page)
 
-    # Renders the `index` template located at `app/views/profiles/index.html.erb`
+    # Filter by user_id if provided
+    if params[:user_id].present?
+      @profiles = @profiles.where(user_id: params[:user_id])
+    end
+
+    # Load all users for the dropdown
+    @users = User.all
+
+    # Render the `index` template located at `app/views/profiles/index.html.erb`
     render 'index'
   rescue StandardError => e
     flash.now[:alert] = "Failed to load profiles: #{e.message}"
@@ -32,7 +41,14 @@ class ProfilesController < ApplicationController
   # POST /profiles or /profiles.json
   def create
     @profile = Profile.new(profile_params)
-    handle_response(@profile.save, :new, "Profile was successfully created.")
+
+    if @profile.save
+      redirect_to @profile, notice: "Profile was successfully created."
+    else
+      flash.now[:alert] = @profile.errors.full_messages.to_sentence
+      @users = User.all # Ensure users are available in case of render
+      render :new, status: :unprocessable_entity
+    end
   end
 
   # PATCH/PUT /profiles/1 or /profiles/1.json
