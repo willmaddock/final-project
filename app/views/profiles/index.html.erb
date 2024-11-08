@@ -5,14 +5,9 @@
 <%= link_to "New profile", new_profile_path, class: "btn btn-primary mb-3" %>
 
 <%= form_with url: profiles_path, method: :get, local: true do %>
-  <div class="form-group mb-3">
+  <div class="form-group">
     <%= label_tag :search, "Search Profiles:" %>
-    <%= text_field_tag :search, params[:search], class: "form-control" %>
-  </div>
-  <div class="form-group mb-3">
-    <%= label_tag :per_page, "Profiles per page:" %>
-    <%= select_tag :per_page, options_for_select([5, 10, 20, 50], params[:per_page]), onchange: 'this.form.submit();', class: "form-control" %>
-    <%= hidden_field_tag :page, params[:page] %>
+    <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "Search by username, location, or email you signed up with" %>
   </div>
   <%= submit_tag "Search", class: "btn btn-primary" %>
 <% end %>
@@ -32,14 +27,20 @@
   </div>
 <% end %>
 
+<%= form_with url: profiles_path, method: :get, local: true do %>
+  <%= label_tag :per_page, "Profiles per page:" %>
+  <%= select_tag :per_page, options_for_select([5, 10, 20, 50], params[:per_page]), onchange: 'this.form.submit();' %>
+  <%= hidden_field_tag :page, params[:page] %>
+<% end %>
+
 <div class="pagination">
   <% if @profiles.prev_page %>
-    <%= link_to 'Previous', profiles_path(page: @profiles.prev_page, per_page: params[:per_page], search: params[:search]), class: 'btn btn-secondary' %>
+    <%= link_to 'Previous', profiles_path(page: @profiles.prev_page, per_page: params[:per_page]), class: 'btn btn-secondary' %>
   <% end %>
 
   <span>Page <%= @profiles.current_page %> of <%= @profiles.total_pages %></span>
 
   <% if @profiles.next_page %>
-    <%= link_to 'Next', profiles_path(page: @profiles.next_page, per_page: params[:per_page], search: params[:search]), class: 'btn btn-secondary' %>
+    <%= link_to 'Next', profiles_path(page: @profiles.next_page, per_page: params[:per_page]), class: 'btn btn-secondary' %>
   <% end %>
 </div>
