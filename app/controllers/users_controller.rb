@@ -28,6 +28,9 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
+    # Set default password if not provided
+    @user.password = "password" if @user.password.blank?
+
     respond_to do |format|
       if @user.save
         flash[:notice] = "User was successfully created."

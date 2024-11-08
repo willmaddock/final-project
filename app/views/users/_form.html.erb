@@ -33,8 +33,8 @@
 
   <!-- Dropdown for Role -->
   <div class="mb-3">
-    <%= form.label :role %>
-    <%= form.select :role, User.roles.keys.map { |r| [r.humanize, r] }, { include_blank: true } %>
+    <%= form.label :role, class: "form-label" %>
+    <%= form.select :role, User.roles.keys.map { |r| [r.humanize, r] }, { include_blank: true }, class: "form-control" %>
   </div>
 
   <!-- Dropdown for Access Level -->
