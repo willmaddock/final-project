@@ -3,7 +3,15 @@ class ProfilesController < ApplicationController
 
   # GET /profiles or /profiles.json
   def index
-    @profiles = Profile.all
+    per_page = (params[:per_page].presence || 10).to_i
+    @profiles = Profile.page(params[:page]).per(per_page)
+
+    # Renders the `index` template located at `app/views/profiles/index.html.erb`
+    render 'index'
+  rescue StandardError => e
+    flash.now[:alert] = "Failed to load profiles: #{e.message}"
+    @profiles = []
+    render 'index'  # Render the same template even in case of an error
   end
 
   # GET /profiles/1 or /profiles/1.json
@@ -45,6 +53,20 @@ class ProfilesController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_profile
     @profile = Profile.find(params[:id])
+  end
+
+  # Authorization method to check user permissions for profile actions
+  def authorize_profile!
+    case action_name
+    when 'new', 'create'
+      redirect_to root_path, alert: "You do not have permission to perform this action." unless current_user.can_create_profiles?
+    when 'edit', 'update'
+      redirect_to root_path, alert: "You do not have permission to perform this action." unless current_user.can_edit_profiles?
+    when 'destroy'
+      redirect_to root_path, alert: "You do not have permission to perform this action." unless current_user.can_delete_profiles?
+    else
+      return true
+    end
   end
 
   # Only allow a list of trusted parameters through.

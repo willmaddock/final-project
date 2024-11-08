@@ -41,11 +41,16 @@ end
   )
 
   # Attach an avatar image by downloading it
-  avatar_url = Faker::Avatar.image
-  file = URI.open(avatar_url)
-  profile.avatar.attach(io: file, filename: 'avatar.png', content_type: 'image/png') # Change content_type as necessary
+  begin
+    avatar_url = Faker::Avatar.image
+    file = URI.open(avatar_url)
+    profile.avatar.attach(io: file, filename: 'avatar.png', content_type: 'image/png') # Change content_type as necessary
+  rescue OpenURI::HTTPError => e
+    puts "Failed to fetch avatar for user #{user.id}: #{e.message}"
+    profile.avatar.attach(io: File.open(Rails.root.join('path_to_default_avatar.png')), filename: 'default_avatar.png', content_type: 'image/png') # Attach a default avatar if necessary
+  end
 
-  profile.save!
+  profile.save! # This will raise an error if saving fails
 
   # Optionally, create some access logs for each user
   rand(1..5).times do
