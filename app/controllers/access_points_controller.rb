@@ -1,13 +1,8 @@
 class AccessPointsController < ApplicationController
   before_action :set_access_point, only: %i[show edit update destroy]
+  before_action :authorize_access_point!, only: %i[new create edit update destroy]
 
   # GET /access_points or /access_points.json
-  def index
-    @access_points = AccessPoint.all
-    @access_logs = AccessLog.page(params[:page]).per(10)  # Example: Fetch access logs for display
-  end
-
-  # GET /access_points
   def index
     per_page = (params[:per_page].presence || 10).to_i
     @access_points = AccessPoint.page(params[:page]).per(per_page)
@@ -79,6 +74,20 @@ class AccessPointsController < ApplicationController
   end
 
   private
+
+  # Authorization method to check user permissions for access points
+  def authorize_access_point!
+    case action_name
+    when 'new', 'create'
+      redirect_to root_path, alert: "You do not have permission to perform this action." unless current_user.can_create_items?
+    when 'edit', 'update'
+      redirect_to root_path, alert: "You do not have permission to perform this action." unless current_user.can_edit_items?
+    when 'destroy'
+      redirect_to root_path, alert: "You do not have permission to perform this action." unless current_user.can_delete_items?
+    else
+      return true
+    end
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_access_point
