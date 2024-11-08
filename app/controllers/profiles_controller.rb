@@ -11,7 +11,11 @@ class ProfilesController < ApplicationController
       @profiles = @profiles.where(user_id: params[:user_id])
     end
 
-    # Render the `index` template located at `app/views/profiles/index.html.erb`
+    # Search functionality
+    if params[:search].present?
+      @profiles = @profiles.joins(:user).where('profiles.bio LIKE :search OR profiles.location LIKE :search OR users.username LIKE :search OR users.email LIKE :search', search: "%#{params[:search]}%")
+    end
+
     render 'index'
   rescue StandardError => e
     flash.now[:alert] = "Failed to load profiles: #{e.message}"
