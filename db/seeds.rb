@@ -1,4 +1,5 @@
 require 'faker'
+require 'open-uri' # Require open-uri to download the image
 
 # Clear existing records only if you want to reset the database
 # Uncomment these lines if you want to start fresh each time you seed
@@ -33,12 +34,18 @@ end
   )
 
   # Create a profile for each user
-  Profile.create!(
+  profile = Profile.new(
     user: user,
     bio: Faker::Lorem.sentence,
-    location: Faker::Address.city,
-    avatar: Faker::Avatar.image
+    location: Faker::Address.city
   )
+
+  # Attach an avatar image by downloading it
+  avatar_url = Faker::Avatar.image
+  file = URI.open(avatar_url)
+  profile.avatar.attach(io: file, filename: 'avatar.png', content_type: 'image/png') # Change content_type as necessary
+
+  profile.save!
 
   # Optionally, create some access logs for each user
   rand(1..5).times do

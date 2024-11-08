@@ -1,37 +1,36 @@
-<%= form_with(model: profile) do |form| %>
+<%= form_with(model: profile, local: true, html: { multipart: true }) do |form| %>
   <% if profile.errors.any? %>
-    <div style="color: red">
+    <div class="alert alert-danger">
       <h2><%= pluralize(profile.errors.count, "error") %> prohibited this profile from being saved:</h2>
-
       <ul>
-        <% profile.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+        <% profile.errors.full_messages.each do |error| %>
+          <li><%= error %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :user_id, style: "display: block" %>
-    <%= form.text_field :user_id %>
+  <div class="form-group">
+    <%= form.label :user_id %>
+    <%= form.text_field :user_id, class: "form-control" %> <!-- User ID input -->
+  </div>
+
+  <div class="form-group">
+    <%= form.label :bio %>
+    <%= form.text_area :bio, class: "form-control" %> <!-- Bio input -->
+  </div>
+
+  <div class="form-group">
+    <%= form.label :location %>
+    <%= form.text_field :location, class: "form-control" %> <!-- Location input -->
+  </div>
+
+  <div class="form-group">
+    <%= form.label :avatar %>
+    <%= form.file_field :avatar, class: "form-control-file" %> <!-- Use file_field for avatar upload -->
   </div>
 
   <div>
-    <%= form.label :bio, style: "display: block" %>
-    <%= form.text_area :bio %>
-  </div>
-
-  <div>
-    <%= form.label :location, style: "display: block" %>
-    <%= form.text_field :location %>
-  </div>
-
-  <div>
-    <%= form.label :avatar, style: "display: block" %>
-    <%= form.text_field :avatar %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+    <%= form.submit "Update Profile", class: "btn btn-primary" %> <!-- Button to submit the form -->
   </div>
 <% end %>

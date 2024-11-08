@@ -1,14 +1,16 @@
-<p style="color: green"><%= notice %></p>
+<p style="color: green"><%= notice %></p> <!-- Display any notice message in green -->
 
 <h1>Profiles</h1>
 
 <div id="profiles">
   <% @profiles.each do |profile| %>
-    <%= render profile %>
-    <p>
-      <%= link_to "Show this profile", profile %>
-    </p>
+    <div class="profile">
+      <%= render profile %> <!-- Render each profile using the corresponding partial -->
+      <p>
+        <%= link_to "Show this profile", profile, class: "btn btn-info" %> <!-- Link to view the profile -->
+      </p>
+    </div>
   <% end %>
 </div>
 
-<%= link_to "New profile", new_profile_path %>
+<%= link_to "New profile", new_profile_path, class: "btn btn-primary" %> <!-- Link to create a new profile -->

@@ -1,4 +1,4 @@
-<div id="<%= dom_id profile %>">
+<div id="<%= dom_id(profile) %>">
   <p>
     <strong>User:</strong>
     <%= profile.user_id %>
@@ -16,7 +16,10 @@
 
   <p>
     <strong>Avatar:</strong>
-    <%= profile.avatar %>
+    <% if profile.avatar.attached? %>
+      <%= image_tag profile.avatar.variant(resize_to_fill: [100, 100]), alt: "Avatar", class: "img-thumbnail" %>
+    <% else %>
+      <%= image_tag asset_path('default_profile_picture.png'), size: "100x100", alt: "Default Avatar", class: "img-thumbnail" %>
+    <% end %>
   </p>
-
 </div>

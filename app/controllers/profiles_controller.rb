@@ -1,5 +1,5 @@
 class ProfilesController < ApplicationController
-  before_action :set_profile, only: %i[ show edit update destroy ]
+  before_action :set_profile, only: %i[show edit update destroy]
 
   # GET /profiles or /profiles.json
   def index
@@ -22,34 +22,17 @@ class ProfilesController < ApplicationController
   # POST /profiles or /profiles.json
   def create
     @profile = Profile.new(profile_params)
-
-    respond_to do |format|
-      if @profile.save
-        format.html { redirect_to @profile, notice: "Profile was successfully created." }
-        format.json { render :show, status: :created, location: @profile }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @profile.errors, status: :unprocessable_entity }
-      end
-    end
+    handle_response(@profile.save, :new, "Profile was successfully created.")
   end
 
   # PATCH/PUT /profiles/1 or /profiles/1.json
   def update
-    respond_to do |format|
-      if @profile.update(profile_params)
-        format.html { redirect_to @profile, notice: "Profile was successfully updated." }
-        format.json { render :show, status: :ok, location: @profile }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @profile.errors, status: :unprocessable_entity }
-      end
-    end
+    handle_response(@profile.update(profile_params), :edit, "Profile was successfully updated.")
   end
 
   # DELETE /profiles/1 or /profiles/1.json
   def destroy
-    @profile.destroy!
+    @profile.destroy
 
     respond_to do |format|
       format.html { redirect_to profiles_path, status: :see_other, notice: "Profile was successfully destroyed." }
@@ -58,13 +41,27 @@ class ProfilesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_profile
-      @profile = Profile.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def profile_params
-      params.require(:profile).permit(:user_id, :bio, :location, :avatar)
+  # Use callbacks to share common setup or constraints between actions.
+  def set_profile
+    @profile = Profile.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def profile_params
+    params.require(:profile).permit(:user_id, :bio, :location, :avatar)
+  end
+
+  # Handle responses for create and update actions
+  def handle_response(success, render_action, notice)
+    respond_to do |format|
+      if success
+        format.html { redirect_to @profile, notice: notice }
+        format.json { render :show, status: :created, location: @profile }
+      else
+        format.html { render render_action, status: :unprocessable_entity }
+        format.json { render json: @profile.errors, status: :unprocessable_entity }
+      end
     end
+  end
 end
