@@ -2,7 +2,6 @@ class ProfilesController < ApplicationController
   before_action :set_profile, only: %i[show edit update destroy]
 
   # GET /profiles or /profiles.json
-  # GET /profiles or /profiles.json
   def index
     per_page = (params[:per_page].presence || 10).to_i
     @profiles = Profile.page(params[:page]).per(per_page)
@@ -11,9 +10,6 @@ class ProfilesController < ApplicationController
     if params[:user_id].present?
       @profiles = @profiles.where(user_id: params[:user_id])
     end
-
-    # Load all users for the dropdown
-    @users = User.all
 
     # Render the `index` template located at `app/views/profiles/index.html.erb`
     render 'index'
@@ -30,12 +26,12 @@ class ProfilesController < ApplicationController
   # GET /profiles/new
   def new
     @profile = Profile.new
-    @users = User.all # Load all users for selection
+    @users = User.where.not(id: Profile.select(:user_id)) # Load users without profiles for selection
   end
 
   # GET /profiles/1/edit
   def edit
-    @users = User.all # Load all users for selection
+    @users = User.where.not(id: Profile.select(:user_id)) # Load users without profiles for selection
   end
 
   # POST /profiles or /profiles.json
@@ -46,7 +42,7 @@ class ProfilesController < ApplicationController
       redirect_to @profile, notice: "Profile was successfully created."
     else
       flash.now[:alert] = @profile.errors.full_messages.to_sentence
-      @users = User.all # Ensure users are available in case of render
+      @users = User.where.not(id: Profile.select(:user_id)) # Ensure users without profiles are available in case of render
       render :new, status: :unprocessable_entity
     end
   end
