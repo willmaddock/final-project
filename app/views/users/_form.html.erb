@@ -1,4 +1,4 @@
-<%= form_with(model: user) do |form| %>
+<%= form_with(model: user, url: admin_create_user_path) do |form| %>
   <% if user.errors.any? %>
     <div class="alert alert-danger">
       <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
@@ -12,29 +12,29 @@
 
   <div class="mb-3">
     <%= form.label :username, class: "form-label" %>
-    <%= form.text_field :username, class: "form-control" %>
+    <%= form.text_field :username, class: "form-control", required: true %>
   </div>
 
   <div class="mb-3">
     <%= form.label :password, class: "form-label" %>
     <%= form.password_field :password, class: "form-control" %>
-    <small class="form-text text-muted">Leave blank if you do not want to change the password.</small>
+    <small class="form-text text-muted">Leave blank if you do not want to change the password. A default password will be set if none is provided.</small>
   </div>
 
   <div class="mb-3">
     <%= form.label :full_name, class: "form-label" %>
-    <%= form.text_field :full_name, class: "form-control" %>
+    <%= form.text_field :full_name, class: "form-control", required: true %>
   </div>
 
   <div class="mb-3">
     <%= form.label :email, class: "form-label" %>
-    <%= form.text_field :email, class: "form-control" %>
+    <%= form.email_field :email, class: "form-control", required: true %>
   </div>
 
   <!-- Dropdown for Role -->
   <div class="mb-3">
-    <%= form.label :role, class: "form-label" %>
-    <%= form.select :role, options_for_select(['Admin', 'Editor', 'Viewer', 'Shipping Agent', 'Logistics Manager'], user.role), {}, class: "form-control" %>
+    <%= form.label :role %>
+    <%= form.select :role, User.roles.keys.map { |r| [r.humanize, r] }, { include_blank: true } %>
   </div>
 
   <!-- Dropdown for Access Level -->
@@ -45,13 +45,12 @@
 
   <div class="mb-3">
     <%= form.label :last_login, class: "form-label" %>
-    <%= form.datetime_field :last_login, class: "form-control" %>
+    <%= form.datetime_field :last_login, class: "form-control", value: user.last_login.try(:strftime, '%Y-%m-%d %H:%M') %>
   </div>
 
-  <div class="mb-3">
-    <%= form.label :status, class: "form-label" %>
-    <%= form.check_box :status %>
-    <%= form.label :status, "Active?" %>
+  <div class="mb-3 form-check">
+    <%= form.check_box :status, class: "form-check-input" %>
+    <%= form.label :status, "Active?", class: "form-check-label" %>
   </div>
 
   <div>
