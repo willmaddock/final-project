@@ -1,0 +1,17 @@
+header {
+  background-color: #f8f9fa; /* Light grey for header background */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.nav-link {
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.nav-link:hover {
+  background-color: #007bff; /* Primary color on hover */
+  color: white;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f1f1; /* Light grey on dropdown hover */
+}

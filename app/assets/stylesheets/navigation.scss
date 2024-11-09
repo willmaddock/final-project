@@ -1,0 +1,8 @@
+.nav-link {
+  transition: background-color 0.3s, color 0.3s;
+
+  &:hover {
+    background-color: #007bff; /* Primary color on hover */
+    color: white;
+  }
+}
