@@ -4,13 +4,34 @@
 
 <%= link_to 'New Access Log', new_access_log_path, class: 'btn btn-primary mb-3' %>
 
-<%= form_with(url: access_logs_path, method: :get, local: true) do |form| %>
-  <div class="form-group mb-3">
-    <%= form.label :per_page, "Records per page:", class: "form-label" %>
-    <%= form.select :per_page, [10, 20, 30], { selected: params[:per_page] || 10 },
-                    { class: "form-select", onchange: 'submitPerPageForm(this.form);' } %>
-  </div>
-<% end %>
+<div class="d-flex mb-3">
+  <!-- Search form -->
+  <%= form_with(url: access_logs_path, method: :get, local: true) do |form| %>
+    <!-- Dropdown for Username -->
+    <div class="form-group me-3">
+      <%= label_tag :username, "Select Username", class: "form-label" %>
+      <%= select_tag :username, options_from_collection_for_select(User.all, 'username', 'username', params[:username]), include_blank: "All", class: "form-select", onchange: 'this.form.submit();' %>
+    </div>
+
+    <!-- Dropdown for Address -->
+    <div class="form-group me-3">
+      <%= label_tag :address, "Select Address", class: "form-label" %>
+      <%= select_tag :address, options_from_collection_for_select(AccessPoint.all, 'location', 'location', params[:address]), include_blank: "All", class: "form-select", onchange: 'this.form.submit();' %>
+    </div>
+
+    <!-- Dropdown for Success Status -->
+    <div class="form-group me-3">
+      <%= label_tag :success, "Success", class: "form-label" %>
+      <%= select_tag :success, options_for_select([['All', ''], ['Yes', 'true'], ['No', 'false']], params[:success]), class: "form-select", onchange: 'this.form.submit();' %>
+    </div>
+
+    <!-- Records per Page Dropdown -->
+    <div class="form-group me-3">
+      <%= form.label :per_page, "Records per page:", class: "form-label" %>
+      <%= form.select :per_page, [10, 20, 30], { selected: params[:per_page] || 10 }, { class: "form-select", onchange: 'submitPerPageForm(this.form);' } %>
+    </div>
+  <% end %>
+</div>
 
 <% if @access_logs.any? %>
   <table class="table table-striped">
@@ -26,8 +47,8 @@
     <tbody>
     <% @access_logs.each do |access_log| %>
       <tr>
-        <td><%= access_log.user_id %></td>
-        <td><%= access_log.access_point_id %></td>
+        <td><%= access_log.user.username %></td>
+        <td><%= access_log.access_point.location %></td>
         <td><%= access_log.timestamp %></td>
         <td><%= access_log.successful ? 'Yes' : 'No' %></td>
         <td><%= link_to 'Show', access_log_path(access_log), class: 'btn btn-info btn-sm' %></td>
@@ -38,13 +59,12 @@
     </tbody>
   </table>
 
-  <!-- Update pagination to include the per_page parameter -->
-  <%= paginate @access_logs, params: { per_page: params[:per_page] } %>
+  <!-- Pagination, including per_page parameter -->
+  <%= paginate @access_logs, params: { per_page: params[:per_page], username: params[:username], address: params[:address], success: params[:success] } %>
 <% else %>
   <p>No access logs found.</p>
 <% end %>
 
-<!-- JavaScript function to ensure form submits on dropdown change -->
 <script>
     function submitPerPageForm(form) {
         form.submit();

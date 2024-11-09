@@ -3,13 +3,30 @@ class AccessLogsController < ApplicationController
   before_action :authorize_access_log!, only: %i[new create edit update destroy]  # Authorization check for certain actions
 
   # GET /access_logs or /access_logs.json
+  # GET /access_logs or /access_logs.json
   def index
-    per_page = (params[:per_page].presence || 10).to_i  # Convert to integer and use default if not present
-    @access_logs = AccessLog.page(params[:page]).per(per_page)  # Use pagination
+    per_page = (params[:per_page].presence || 10).to_i
 
+    # Build the query dynamically based on selected filter
+    @access_logs = AccessLog.joins(:user, :access_point)
+
+    if params[:username].present?
+      @access_logs = @access_logs.where(users: { username: params[:username] })
+    end
+
+    if params[:address].present?
+      @access_logs = @access_logs.where(access_points: { location: params[:address] })
+    end
+
+    if params[:success].present?
+      success_value = params[:success] == 'true'
+      @access_logs = @access_logs.where(successful: success_value)
+    end
+
+    @access_logs = @access_logs.page(params[:page]).per(per_page)
   rescue StandardError => e
     flash.now[:alert] = "Failed to load access logs: #{e.message}"
-    @access_logs = []  # Fallback to an empty array to prevent errors in the view
+    @access_logs = []
   end
 
   # GET /access_logs/1 or /access_logs/1.json
