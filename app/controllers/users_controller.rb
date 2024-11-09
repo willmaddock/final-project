@@ -12,7 +12,16 @@ class UsersController < ApplicationController
     @users = @users.where("full_name LIKE ?", "%#{params[:full_name]}%") if params[:full_name].present?
     @users = @users.where("email LIKE ?", "%#{params[:email]}%") if params[:email].present?
     @users = @users.where(role: params[:role]) if params[:role].present? && params[:role] != ''
-    @users = @users.where(status: params[:status]) if params[:status].present? && params[:status] != ''
+
+    # Handle the status filter
+    if params[:status].present?
+      case params[:status]
+      when 'active'
+        @users = @users.where(status: true)
+      when 'inactive'
+        @users = @users.where(status: false)
+      end
+    end
 
     @users = @users.page(params[:page]).per(per_page)
   rescue StandardError => e

@@ -3,7 +3,7 @@ class ProfilesController < ApplicationController
 
   # GET /profiles or /profiles.json
   def index
-    per_page = (params[:per_page].presence || 10).to_i
+    per_page = (params[:per_page].presence || 12).to_i
     @profiles = Profile.page(params[:page]).per(per_page)
 
     # Filter by username if provided

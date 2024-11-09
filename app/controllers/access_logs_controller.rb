@@ -3,7 +3,6 @@ class AccessLogsController < ApplicationController
   before_action :authorize_access_log!, only: %i[new create edit update destroy]  # Authorization check for certain actions
 
   # GET /access_logs or /access_logs.json
-  # GET /access_logs or /access_logs.json
   def index
     per_page = (params[:per_page].presence || 10).to_i
 
@@ -21,6 +20,14 @@ class AccessLogsController < ApplicationController
     if params[:success].present?
       success_value = params[:success] == 'true'
       @access_logs = @access_logs.where(successful: success_value)
+    end
+
+    # Date filtering based on params[:date]
+    if params[:date].present?
+      date = Date.parse(params[:date]) rescue nil
+      if date
+        @access_logs = @access_logs.where(timestamp: date.beginning_of_day..date.end_of_day)
+      end
     end
 
     @access_logs = @access_logs.page(params[:page]).per(per_page)

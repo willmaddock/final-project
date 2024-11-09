@@ -5,41 +5,49 @@
 <%= link_to "New profile", new_profile_path, class: "btn btn-primary mb-3" %>
 
 <%= form_with url: profiles_path, method: :get, local: true do %>
-  <div class="form-group">
-    <%= label_tag :username, "Username:" %>
-    <%= select_tag :username, options_from_collection_for_select(User.all, :username, :username, params[:username]), prompt: "Select a username", onchange: 'this.form.submit();', class: "form-control" %>
-  </div>
+  <div class="d-flex align-items-center mb-3">
+    <div class="me-3">
+      <%= label_tag :username, "Username:" %>
+      <%= select_tag :username, options_from_collection_for_select(User.all, :username, :username, params[:username]),
+                     prompt: "Select a username", onchange: 'this.form.submit();', class: "form-control" %>
+    </div>
 
-  <div class="form-group">
-    <%= label_tag :location, "Location:" %>
-    <%= select_tag :location, options_for_select(Profile.pluck(:location).uniq, params[:location]), prompt: "Select a location", onchange: 'this.form.submit();', class: "form-control" %>
-  </div>
+    <div class="me-3">
+      <%= label_tag :location, "Location:" %>
+      <%= select_tag :location, options_for_select(Profile.pluck(:location).uniq, params[:location]),
+                     prompt: "Select a location", onchange: 'this.form.submit();', class: "form-control" %>
+    </div>
 
-  <div class="form-group">
-    <%= label_tag :email, "Email:" %>
-    <%= select_tag :email, options_from_collection_for_select(User.all, :email, :email, params[:email]), prompt: "Select an email", onchange: 'this.form.submit();', class: "form-control" %>
+    <div class="me-3">
+      <%= label_tag :email, "Email:" %>
+      <%= select_tag :email, options_from_collection_for_select(User.all, :email, :email, params[:email]),
+                     prompt: "Select an email", onchange: 'this.form.submit();', class: "form-control" %>
+    </div>
+
+    <div>
+      <%= label_tag :per_page, "Profiles per page:" %>
+      <%= select_tag :per_page, options_for_select([12, 24, 36, 48], params[:per_page]),
+                     onchange: 'this.form.submit();', class: "form-control" %>
+      <%= hidden_field_tag :page, params[:page] %>
+    </div>
   </div>
 <% end %>
 
 <% if @profiles.empty? %>
   <p>No profiles found.</p>
 <% else %>
-  <div id="profiles">
+  <div id="profiles" class="d-flex flex-wrap">
     <% @profiles.each do |profile| %>
-      <div class="profile">
+      <div class="profile card m-2" style="width: 18rem;">
         <%= render profile %>
-        <p>
-          <%= link_to "Show this profile", profile, class: "btn btn-info" %>
-        </p>
+        <div class="card-body">
+          <p>
+            <%= link_to "Show this profile", profile, class: "btn btn-info" %>
+          </p>
+        </div>
       </div>
     <% end %>
   </div>
-<% end %>
-
-<%= form_with url: profiles_path, method: :get, local: true do %>
-  <%= label_tag :per_page, "Profiles per page:" %>
-  <%= select_tag :per_page, options_for_select([5, 10, 20, 50], params[:per_page]), onchange: 'this.form.submit();' %>
-  <%= hidden_field_tag :page, params[:page] %>
 <% end %>
 
 <div class="pagination">

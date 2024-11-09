@@ -5,40 +5,42 @@
 <%= link_to 'New User', new_user_path, class: 'btn btn-primary mb-3' %>
 
 <%= form_with(url: users_path, method: :get, local: true) do |form| %>
-  <div class="form-group mb-3">
-    <%= form.label :per_page, "Records per page:", class: "form-label" %>
-    <%= form.select :per_page, [10, 20, 30], { selected: params[:per_page] || 10 },
-                    { class: "form-select", onchange: 'submitPerPageForm(this.form);' } %>
-  </div>
+  <div class="row mb-3">
+    <div class="col">
+      <%= form.label :per_page, "Records per page:", class: "form-label" %>
+      <%= form.select :per_page, [10, 20, 30], { selected: params[:per_page] || 10 },
+                      { class: "form-select", onchange: 'submitPerPageForm(this.form);' } %>
+    </div>
 
-  <div class="form-group mb-3">
-    <%= form.label :username, "Username", class: "form-label" %>
-    <%= form.select :username, User.pluck(:username).uniq.map { |u| [u, u] }, { include_blank: true },
-                    { class: "form-select", onchange: 'this.form.submit();' } %>
-  </div>
+    <div class="col">
+      <%= form.label :username, "Username", class: "form-label" %>
+      <%= form.select :username, User.pluck(:username).uniq.map { |u| [u, u] }, { include_blank: true },
+                      { class: "form-select", onchange: 'this.form.submit();' } %>
+    </div>
 
-  <div class="form-group mb-3">
-    <%= form.label :full_name, "Full Name", class: "form-label" %>
-    <%= form.select :full_name, User.pluck(:full_name).uniq.map { |n| [n, n] }, { include_blank: true },
-                    { class: "form-select", onchange: 'this.form.submit();' } %>
-  </div>
+    <div class="col">
+      <%= form.label :full_name, "Full Name", class: "form-label" %>
+      <%= form.select :full_name, User.pluck(:full_name).uniq.map { |n| [n, n] }, { include_blank: true },
+                      { class: "form-select", onchange: 'this.form.submit();' } %>
+    </div>
 
-  <div class="form-group mb-3">
-    <%= form.label :email, "Email", class: "form-label" %>
-    <%= form.select :email, User.pluck(:email).uniq.map { |e| [e, e] }, { include_blank: true },
-                    { class: "form-select", onchange: 'this.form.submit();' } %>
-  </div>
+    <div class="col">
+      <%= form.label :email, "Email", class: "form-label" %>
+      <%= form.select :email, User.pluck(:email).uniq.map { |e| [e, e] }, { include_blank: true },
+                      { class: "form-select", onchange: 'this.form.submit();' } %>
+    </div>
 
-  <div class="form-group mb-3">
-    <%= form.label :role, "Role", class: "form-label" %>
-    <%= form.select :role, User.roles.keys.map { |role| [role.humanize, role] }, { include_blank: true },
-                    { class: "form-select", onchange: 'this.form.submit();' } %>
-  </div>
+    <div class="col">
+      <%= form.label :role, "Role", class: "form-label" %>
+      <%= form.select :role, User.roles.keys.map { |role| [role.humanize, role] }, { include_blank: true },
+                      { class: "form-select", onchange: 'this.form.submit();' } %>
+    </div>
 
-  <div class="form-group mb-3">
-    <%= form.label :status, "Status", class: "form-label" %>
-    <%= form.select :status, [['Active', 'active'], ['Inactive', 'inactive'], ['All', '']],
-                    { selected: params[:status] }, { class: "form-select", onchange: 'this.form.submit();' } %>
+    <div class="col">
+      <%= form.label :status, "Status", class: "form-label" %>
+      <%= form.select :status, [['Active', 'active'], ['Inactive', 'inactive'], ['All', '']],
+                      { selected: params[:status] }, { class: "form-select", onchange: 'this.form.submit();' } %>
+    </div>
   </div>
 <% end %>
 
