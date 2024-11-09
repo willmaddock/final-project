@@ -1,0 +1,37 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Elevated Access Requests</h1>
+
+<div id="elevated_access_requests">
+  <table class="table">
+    <thead>
+    <tr>
+      <th>User</th>
+      <th>Access Point</th>
+      <th>Reason</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @elevated_access_requests.each do |request| %>
+      <tr>
+        <td><%= request.user.full_name %></td>
+        <td><%= request.access_point.location %></td> <!-- Updated to location -->
+        <td><%= request.reason %></td>
+        <td><%= request.status %></td>
+        <td>
+          <% if request.status == 'pending' %>
+            <%= button_to 'Approve', approve_elevated_access_request_path(request), method: :post, class: 'btn btn-success' %>
+            <%= button_to 'Deny', deny_elevated_access_request_path(request), method: :post, class: 'btn btn-danger' %>
+          <% else %>
+            <p><strong>Status:</strong> <%= request.status.humanize %></p>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= link_to "New Elevated Access Request", new_elevated_access_request_path, class: 'btn btn-primary' %>

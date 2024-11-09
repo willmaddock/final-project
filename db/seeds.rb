@@ -7,6 +7,7 @@ require 'open-uri' # Require open-uri to download images
 # Profile.destroy_all
 # AccessLog.destroy_all
 # AccessPoint.destroy_all
+# ElevatedAccessRequest.destroy_all
 
 # Create 10 access points
 10.times do
@@ -63,7 +64,20 @@ end
       successful: [true, false].sample
     )
   end
+
+  # Create elevated access requests only for shipping agents
+  if user.role == 'shipping_agent'
+    rand(1..3).times do
+      ElevatedAccessRequest.create!(
+        user: user,
+        access_point_id: rand(1..10),
+        reason: Faker::Lorem.sentence,
+        status: %w[pending approved denied].sample
+      )
+    end
+  end
 end
 
 puts "Created #{User.count} users, #{Profile.count} profiles, and #{AccessLog.count} access logs."
 puts "Created #{AccessPoint.count} access points."
+puts "Created #{ElevatedAccessRequest.count} elevated access requests."

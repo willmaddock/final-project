@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @elevated_access_request %>
+
+<div>
+  <%= link_to "Edit this elevated access request", edit_elevated_access_request_path(@elevated_access_request) %> |
+  <%= link_to "Back to elevated access requests", elevated_access_requests_path %>
+
+  <%= button_to "Destroy this elevated access request", @elevated_access_request, method: :delete %>
+</div>

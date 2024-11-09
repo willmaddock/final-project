@@ -1,4 +1,3 @@
-<!-- app/views/layouts/_header.html.erb -->
 <header class="bg-light p-3">
   <div class="container">
     <div class="d-flex justify-content-between align-items-center">
@@ -9,6 +8,11 @@
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <% if user_signed_in? %>
+            <% if current_user.role == 'shipping_agent' || current_user.role == 'logistics_manager' %>
+              <li>
+                <%= link_to 'Request Elevated Access', new_elevated_access_request_path, class: 'dropdown-item' %>
+              </li>
+            <% end %>
             <li>
               <%= link_to 'Logout', destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: 'dropdown-item' %>
             </li>

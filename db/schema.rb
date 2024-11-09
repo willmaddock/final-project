@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_03_195018) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_04_040342) do
   create_table "access_logs", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "access_point_id", null: false
@@ -64,6 +64,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_03_195018) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "elevated_access_requests", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "access_point_id", null: false
+    t.text "reason"
+    t.string "status", default: "pending"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["access_point_id"], name: "index_elevated_access_requests_on_access_point_id"
+    t.index ["user_id"], name: "index_elevated_access_requests_on_user_id"
+  end
+
   create_table "profiles", force: :cascade do |t|
     t.integer "user_id", null: false
     t.text "bio"
@@ -98,5 +109,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_03_195018) do
   add_foreign_key "access_logs", "users"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "elevated_access_requests", "access_points"
+  add_foreign_key "elevated_access_requests", "users"
   add_foreign_key "profiles", "users"
 end
