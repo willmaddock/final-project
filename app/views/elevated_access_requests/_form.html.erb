@@ -1,8 +1,7 @@
-<%= form_with(model: elevated_access_request) do |form| %>
+<%= form_with(model: elevated_access_request, local: true) do |form| %>
   <% if elevated_access_request.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(elevated_access_request.errors.count, "error") %> prohibited this elevated_access_request from being saved:</h2>
-
+    <div class="alert alert-danger">
+      <h2><%= pluralize(elevated_access_request.errors.count, "error") %> prohibited this elevated access request from being saved:</h2>
       <ul>
         <% elevated_access_request.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -11,27 +10,27 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :user_id, style: "display: block" %>
-    <%= form.text_field :user_id %>
+  <div class="mb-3">
+    <%= form.label :user_id, class: "form-label" %>
+    <%= form.text_field :user_id, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :access_point_id, class: "form-label" %>
+    <%= form.text_field :access_point_id, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :reason, class: "form-label" %>
+    <%= form.text_area :reason, class: "form-control", rows: 3 %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :status, class: "form-label" %>
+    <%= form.text_field :status, class: "form-control" %>
   </div>
 
   <div>
-    <%= form.label :access_point_id, style: "display: block" %>
-    <%= form.text_field :access_point_id %>
-  </div>
-
-  <div>
-    <%= form.label :reason, style: "display: block" %>
-    <%= form.text_area :reason %>
-  </div>
-
-  <div>
-    <%= form.label :status, style: "display: block" %>
-    <%= form.text_field :status %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+    <%= form.submit "Update Request", class: "btn btn-primary" %>
   </div>
 <% end %>

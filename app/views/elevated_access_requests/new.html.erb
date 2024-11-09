@@ -1,39 +1,39 @@
-<h1>New Elevated Access Request</h1>
+<h1 class="text-center mb-4">New Elevated Access Request</h1>
 
-<%= form_with(model: @elevated_access_request, local: true) do |form| %>
-  <% if @elevated_access_request.errors.any? %>
-    <div id="error_explanation" class="alert alert-danger">
-      <h2><%= pluralize(@elevated_access_request.errors.count, "error") %> prohibited this elevated access request from being saved:</h2>
-      <ul>
-        <% @elevated_access_request.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+<div class="container mt-5">
+  <%= form_with(model: @elevated_access_request, local: true) do |form| %>
+    <% if @elevated_access_request.errors.any? %>
+      <div id="error_explanation" class="alert alert-danger">
+        <h2><%= pluralize(@elevated_access_request.errors.count, "error") %> prohibited this elevated access request from being saved:</h2>
+        <ul>
+          <% @elevated_access_request.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="mb-3">
+      <%= form.label :user_id, "Requesting User", class: 'form-label' %>
+      <%= form.collection_select :user_id, User.where(role: 'shipping_agent'), :id, :full_name, { prompt: "Select Shipping Agent" }, { class: 'form-select' } %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :access_point_id, "Access Point", class: 'form-label' %>
+      <%= form.collection_select :access_point_id, AccessPoint.all, :id, :location, { prompt: "Select Access Point" }, { class: 'form-select' } %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :reason, class: 'form-label' %>
+      <%= form.text_area :reason, class: 'form-control', rows: 3 %>
+    </div>
+
+    <div class="text-center">
+      <%= form.submit "Request Elevated Access", class: 'btn btn-primary' %>
     </div>
   <% end %>
 
-  <div class="mb-3">
-    <%= form.label :user_id, "Requesting User", class: 'form-label' %>
-    <%= form.collection_select :user_id, User.where(role: 'shipping_agent'), :id, :full_name, { prompt: "Select Shipping Agent" }, { class: 'form-select' } %>
+  <div class="text-center mt-3">
+    <%= link_to "Back to Elevated Access Requests", elevated_access_requests_path, class: 'btn btn-secondary' %>
   </div>
-
-  <div class="mb-3">
-    <%= form.label :access_point_id, "Access Point", class: 'form-label' %>
-    <%= form.collection_select :access_point_id, AccessPoint.all, :id, :location, { prompt: "Select Access Point" }, { class: 'form-select' } %>
-  </div>
-
-  <div class="mb-3">
-    <%= form.label :reason, class: 'form-label' %>
-    <%= form.text_area :reason, class: 'form-control', rows: 3 %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit "Request Elevated Access", class: 'btn btn-primary' %>
-  </div>
-<% end %>
-
-<br>
-
-<div>
-  <%= link_to "Back to Elevated Access Requests", elevated_access_requests_path, class: 'btn btn-secondary' %>
 </div>

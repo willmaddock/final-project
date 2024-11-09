@@ -2,6 +2,35 @@
 
 <h1>Elevated Access Requests</h1>
 
+<%= link_to "New Elevated Access Request", new_elevated_access_request_path, class: 'btn btn-primary mb-3' %>
+
+<div>
+  <%= form_with url: elevated_access_requests_path, method: :get, local: true do |f| %>
+    <div class="form-group row">
+      <div class="col-md-4">
+        <%= f.label :user_id, "Select User:" %>
+        <%= f.select :user_id, User.where(id: ElevatedAccessRequest.where(status: ['pending', 'approved', 'denied']).select(:user_id))
+                                   .distinct
+                                   .collect { |user| [user.full_name, user.id] },
+                     { include_blank: "Select User" }, class: 'form-control' %>
+      </div>
+      <div class="col-md-4">
+        <%= f.label :access_point_id, "Select Access Point:" %>
+        <%= f.select :access_point_id, AccessPoint.all.collect { |point| [point.location, point.id] },
+                     { include_blank: "Select Access Point" }, class: 'form-control' %>
+      </div>
+      <div class="col-md-4">
+        <%= f.label :per_page, "Records per page:" %>
+        <%= f.select :per_page, [10, 20, 30], { selected: params[:per_page] || 10 },
+                     { class: "form-control", onchange: 'this.form.submit();' } %>
+      </div>
+    </div>
+
+    <!-- Removed extra submit button div -->
+    <%= f.submit "Search", class: 'btn btn-primary mt-3' %>
+  <% end %>
+</div>
+
 <div id="elevated_access_requests">
   <table class="table">
     <thead>
@@ -17,9 +46,9 @@
     <% @elevated_access_requests.each do |request| %>
       <tr>
         <td><%= request.user.full_name %></td>
-        <td><%= request.access_point.location %></td> <!-- Updated to location -->
+        <td><%= request.access_point.location %></td>
         <td><%= request.reason %></td>
-        <td><%= request.status %></td>
+        <td><%= request.status.humanize %></td>
         <td>
           <% if request.status == 'pending' %>
             <%= button_to 'Approve', approve_elevated_access_request_path(request), method: :post, class: 'btn btn-success' %>
@@ -34,4 +63,6 @@
   </table>
 </div>
 
-<%= link_to "New Elevated Access Request", new_elevated_access_request_path, class: 'btn btn-primary' %>
+<div class="pagination">
+  <%= paginate @elevated_access_requests %>
+</div>

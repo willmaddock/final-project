@@ -1,10 +1,40 @@
-<p style="color: green"><%= notice %></p>
+<h1>Elevated Access Request Details</h1>
 
-<%= render @elevated_access_request %>
+<% if notice %>
+  <div class="alert alert-success" role="alert" style="color: green;">
+    <%= notice %>
+  </div>
+<% end %>
 
-<div>
-  <%= link_to "Edit this elevated access request", edit_elevated_access_request_path(@elevated_access_request) %> |
-  <%= link_to "Back to elevated access requests", elevated_access_requests_path %>
+<div id="<%= dom_id @elevated_access_request %>" class="elevated-access-request card shadow-sm border-0 p-4 mb-4">
+  <h2 class="card-title">Request Information</h2>
 
-  <%= button_to "Destroy this elevated access request", @elevated_access_request, method: :delete %>
+  <div class="card-body">
+    <p>
+      <strong>User:</strong>
+      <%= @elevated_access_request.user.full_name %>
+    </p>
+
+    <p>
+      <strong>Access Point:</strong>
+      <%= @elevated_access_request.access_point.location %>
+    </p>
+
+    <p>
+      <strong>Reason:</strong>
+      <%= @elevated_access_request.reason %>
+    </p>
+
+    <p>
+      <strong>Status:</strong>
+      <%= @elevated_access_request.status.humanize %>
+    </p>
+  </div>
+</div>
+
+<div class="text-center mt-3">
+  <%= link_to "Submit Elevated Access Requests", elevated_access_requests_path, class: 'btn btn-primary' %>
+  <%= link_to "Edit this Elevated Access Request", edit_elevated_access_request_path(@elevated_access_request), class: 'btn btn-secondary' %> |
+
+  <%= button_to "Cancel Elevated Access Request", @elevated_access_request, method: :delete, data: { confirm: "Are you sure you want to cancel this elevated access request?" }, class: 'btn btn-danger' %>
 </div>

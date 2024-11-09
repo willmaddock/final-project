@@ -6,7 +6,22 @@ class ElevatedAccessRequestsController < ApplicationController
 
   # GET /elevated_access_requests or /elevated_access_requests.json
   def index
-    @elevated_access_requests = ElevatedAccessRequest.all
+    per_page = params[:per_page] || 10  # Default to 10 items per page
+    @elevated_access_requests = ElevatedAccessRequest
+                                  .select("elevated_access_requests.*, CASE WHEN status = 'pending' THEN 0 ELSE 1 END as status_order")
+                                  .order("status_order ASC")
+
+    # Filter by user if provided
+    if params[:user_id].present?
+      @elevated_access_requests = @elevated_access_requests.where(user_id: params[:user_id])
+    end
+
+    # Filter by access point if provided
+    if params[:access_point_id].present?
+      @elevated_access_requests = @elevated_access_requests.where(access_point_id: params[:access_point_id])
+    end
+
+    @elevated_access_requests = @elevated_access_requests.page(params[:page]).per(per_page)  # Add pagination here
   end
 
   # GET /elevated_access_requests/1 or /elevated_access_requests/1.json

@@ -1,10 +1,19 @@
-<h1>Editing elevated access request</h1>
+<div class="container mt-5">
+  <h1 class="text-center mb-4 display-6">Editing Elevated Access Request</h1>
 
-<%= render "form", elevated_access_request: @elevated_access_request %>
+  <div class="card shadow-sm border-0 p-4 mb-4">
+    <%= form_with model: @elevated_access_request, local: true do |f| %>
+      <div class="mb-3">
+        <%= f.label :reason, "Reason", class: "form-label" %>
+        <%= f.text_area :reason, class: "form-control", rows: 3 %>
+      </div>
+      <div class="text-center">
+        <%= f.submit "Update Reason", class: 'btn btn-primary' %>
+      </div>
+    <% end %>
+  </div>
 
-<br>
-
-<div>
-  <%= link_to "Show this elevated access request", @elevated_access_request %> |
-  <%= link_to "Back to elevated access requests", elevated_access_requests_path %>
+  <div class="text-center mt-3">
+    <%= link_to "Show this Elevated Access Request", @elevated_access_request, class: 'btn btn-info me-2' %>
+  </div>
 </div>

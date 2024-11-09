@@ -1,22 +1,30 @@
-<div id="<%= dom_id elevated_access_request %>">
-  <p>
-    <strong>User:</strong>
-    <%= elevated_access_request.user_id %>
-  </p>
+<div id="<%= dom_id elevated_access_request %>" class="card shadow-sm border-0 p-4 mb-4">
+  <h2 class="card-title">Elevated Access Request Details</h2>
 
-  <p>
-    <strong>Access point:</strong>
-    <%= elevated_access_request.access_point_id %>
-  </p>
+  <div class="card-body">
+    <p>
+      <strong>User:</strong>
+      <%= elevated_access_request.user.full_name %>
+    </p>
 
-  <p>
-    <strong>Reason:</strong>
-    <%= elevated_access_request.reason %>
-  </p>
+    <p>
+      <strong>Access Point:</strong>
+      <%= elevated_access_request.access_point.location %>
+    </p>
 
-  <p>
-    <strong>Status:</strong>
-    <%= elevated_access_request.status %>
-  </p>
+    <p>
+      <strong>Reason:</strong>
+      <%= elevated_access_request.reason %>
+    </p>
 
+    <p>
+      <strong>Status:</strong>
+      <%= elevated_access_request.status.humanize %>
+    </p>
+  </div>
+
+  <div class="text-center mt-3">
+    <%= link_to "Edit this Elevated Access Request", edit_elevated_access_request_path(elevated_access_request), class: 'btn btn-primary me-2' %>
+    <%= link_to "Back to Elevated Access Requests", elevated_access_requests_path, class: 'btn btn-secondary' %>
+  </div>
 </div>
