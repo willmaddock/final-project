@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_02_184416) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_03_085501) do
   create_table "access_logs", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "access_point_id", null: false
@@ -31,6 +31,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_02_184416) do
     t.boolean "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["access_level"], name: "index_access_points_on_access_level"
+    t.index ["description"], name: "index_access_points_on_description"
+    t.index ["location"], name: "index_access_points_on_location"
   end
 
   create_table "active_storage_attachments", force: :cascade do |t|

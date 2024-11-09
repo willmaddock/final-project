@@ -1,5 +1,5 @@
 require 'faker'
-require 'open-uri' # Require open-uri to download the image
+require 'open-uri' # Require open-uri to download images
 
 # Clear existing records only if you want to reset the database
 # Uncomment these lines if you want to start fresh each time you seed
@@ -20,7 +20,8 @@ end
 
 # Create 50 users with profiles and access logs
 50.times do
-  password = Faker::Internet.password(min_length: 8) # Generate the password first
+  # Generate a random password for each user
+  password = Faker::Internet.password(min_length: 8)
 
   user = User.create!(
     username: Faker::Internet.username,
@@ -28,7 +29,7 @@ end
     email: Faker::Internet.email,
     password: password, # Set the password for Devise
     password_confirmation: password, # Ensure password confirmation matches
-    role: %w[admin editor viewer shipping_agent logistics_manager].sample, # Assign a random role directly
+    role: %w[admin editor viewer shipping_agent logistics_manager].sample, # Assign a random role
     access_level: rand(1..5),
     status: [true, false].sample
   )
@@ -47,7 +48,8 @@ end
     profile.avatar.attach(io: file, filename: 'avatar.png', content_type: 'image/png') # Change content_type as necessary
   rescue OpenURI::HTTPError => e
     puts "Failed to fetch avatar for user #{user.id}: #{e.message}"
-    profile.avatar.attach(io: File.open(Rails.root.join('path_to_default_avatar.png')), filename: 'default_avatar.png', content_type: 'image/png') # Attach a default avatar if necessary
+    # Attach a default avatar if necessary
+    profile.avatar.attach(io: File.open(Rails.root.join('path_to_default_avatar.png')), filename: 'default_avatar.png', content_type: 'image/png')
   end
 
   profile.save! # This will raise an error if saving fails

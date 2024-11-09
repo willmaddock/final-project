@@ -5,13 +5,27 @@ class AccessPointsController < ApplicationController
   # GET /access_points or /access_points.json
   def index
     per_page = (params[:per_page].presence || 10).to_i
-    @access_points = AccessPoint.page(params[:page]).per(per_page)
+    @query = params[:query]
+
+    # Initialize the access points relation
+    access_points_relation = AccessPoint.all
+
+    if @query.present?
+      @query = @query.downcase  # Ensure the query is downcased for case-insensitive search
+      access_points_relation = access_points_relation.where(
+        "LOWER(location) LIKE ? OR LOWER(access_level) LIKE ? OR LOWER(description) LIKE ?",
+        "%#{@query}%", "%#{@query}%", "%#{@query}%"
+      )
+    end
+
+    # Paginate the relation instead of an array
+    @access_points = access_points_relation.page(params[:page]).per(per_page)
 
     # Renders the `index` template located at `app/views/access_points/index.html.erb`
     render 'index'
   rescue StandardError => e
     flash.now[:alert] = "Failed to load access points: #{e.message}"
-    @access_points = []
+    @access_points = AccessPoint.none.page(params[:page]).per(per_page)  # Ensure it's an ActiveRecord relation
     render 'index'  # Render the same template even in case of an error
   end
 

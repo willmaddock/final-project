@@ -12,6 +12,24 @@
   <div class="alert alert-success"><%= flash[:notice] %></div>
 <% end %>
 
+<!-- Search Form -->
+<%= form_with(url: access_points_path, method: :get, local: true) do |form| %>
+  <div class="input-group mb-3">
+    <%= form.text_field :query, class: 'form-control', placeholder: 'Search by location, access level, or description', value: params[:query] %>
+    <div class="input-group-append">
+      <%= form.submit 'Search', class: 'btn btn-primary' %>
+    </div>
+  </div>
+<% end %>
+
+<%= form_with(url: access_points_path, method: :get, local: true) do |form| %>
+  <div class="form-group mb-3">
+    <%= form.label :per_page, "Records per page:", class: "form-label" %>
+    <%= form.select :per_page, [10, 20, 30], { selected: params[:per_page] || 10 },
+                    { class: "form-select", onchange: 'this.form.submit();' } %>
+  </div>
+<% end %>
+
 <div class="table-responsive">
   <table class="table table-striped">
     <thead>
@@ -40,4 +58,9 @@
   </table>
 </div>
 
-<%= paginate @access_points %>
+<% if @access_points.any? %>
+  <!-- Update pagination to include the per_page parameter -->
+  <%= paginate @access_points, params: { per_page: params[:per_page] } %>
+<% else %>
+  <p>No access points found.</p>
+<% end %>
