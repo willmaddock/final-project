@@ -6,14 +6,19 @@ class ProfilesController < ApplicationController
     per_page = (params[:per_page].presence || 10).to_i
     @profiles = Profile.page(params[:page]).per(per_page)
 
-    # Filter by user_id if provided
-    if params[:user_id].present?
-      @profiles = @profiles.where(user_id: params[:user_id])
+    # Filter by username if provided
+    if params[:username].present?
+      @profiles = @profiles.joins(:user).where('users.username = ?', params[:username])
     end
 
-    # Search functionality
-    if params[:search].present?
-      @profiles = @profiles.joins(:user).where('profiles.bio LIKE :search OR profiles.location LIKE :search OR users.username LIKE :search OR users.email LIKE :search', search: "%#{params[:search]}%")
+    # Filter by location if provided
+    if params[:location].present?
+      @profiles = @profiles.where(location: params[:location])
+    end
+
+    # Filter by email if provided
+    if params[:email].present?
+      @profiles = @profiles.joins(:user).where('users.email = ?', params[:email])
     end
 
     render 'index'

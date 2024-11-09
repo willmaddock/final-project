@@ -12,16 +12,30 @@
   <div class="alert alert-success"><%= flash[:notice] %></div>
 <% end %>
 
-<!-- Search Form -->
+<!-- Filtering Form -->
 <%= form_with(url: access_points_path, method: :get, local: true) do |form| %>
-  <div class="input-group mb-3">
-    <%= form.text_field :query, class: 'form-control', placeholder: 'Search by location, access level, or description', value: params[:query] %>
-    <div class="input-group-append">
-      <%= form.submit 'Search', class: 'btn btn-primary' %>
+  <div class="form-row mb-3">
+    <div class="col">
+      <%= form.label :location, "Location:" %>
+      <%= form.select :location, AccessPoint.select(:location).distinct.map { |ap| [ap.location, ap.location] }, { include_blank: 'Select Location' }, { class: 'form-control', onchange: 'this.form.submit();' } %>
+    </div>
+    <div class="col">
+      <%= form.label :access_level, "Access Level:" %>
+      <%= form.select :access_level, AccessPoint.select(:access_level).distinct.map { |ap| [ap.access_level, ap.access_level] }, { include_blank: 'Select Access Level' }, { class: 'form-control', onchange: 'this.form.submit();' } %>
+    </div>
+    <div class="col">
+      <%= form.label :status, "Status:" %>
+      <%= form.select :status, [['Active', true], ['Inactive', false]], { include_blank: 'Select Status' }, { class: 'form-control', onchange: 'this.form.submit();' } %>
+    </div>
+  </div>
+  <div class="form-row mb-3">
+    <div class="col">
+      <%= form.submit 'Filter', class: 'btn btn-primary' %>
     </div>
   </div>
 <% end %>
 
+<!-- Records per Page Selector -->
 <%= form_with(url: access_points_path, method: :get, local: true) do |form| %>
   <div class="form-group mb-3">
     <%= form.label :per_page, "Records per page:", class: "form-label" %>
@@ -51,16 +65,13 @@
         <td><%= access_point.status ? 'Active' : 'Inactive' %></td>
         <td><%= link_to 'Show', access_point, class: 'btn btn-info' %></td>
         <td><%= link_to 'Edit', edit_access_point_path(access_point), class: 'btn btn-warning' %></td>
-        <td><%= link_to 'Destroy', access_point, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %></td>
+        <td>
+          <%= link_to 'Destroy', access_point, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+        </td>
       </tr>
     <% end %>
     </tbody>
   </table>
 </div>
 
-<% if @access_points.any? %>
-  <!-- Update pagination to include the per_page parameter -->
-  <%= paginate @access_points, params: { per_page: params[:per_page] } %>
-<% else %>
-  <p>No access points found.</p>
-<% end %>
+<%= paginate @access_points %>

@@ -10,12 +10,18 @@ class AccessPointsController < ApplicationController
     # Initialize the access points relation
     access_points_relation = AccessPoint.all
 
-    if @query.present?
-      @query = @query.downcase  # Ensure the query is downcased for case-insensitive search
-      access_points_relation = access_points_relation.where(
-        "LOWER(location) LIKE ? OR LOWER(access_level) LIKE ? OR LOWER(description) LIKE ?",
-        "%#{@query}%", "%#{@query}%", "%#{@query}%"
-      )
+    # Filter by selected parameters if present
+    if params[:location].present?
+      access_points_relation = access_points_relation.where(location: params[:location])
+    end
+
+    if params[:access_level].present?
+      access_points_relation = access_points_relation.where(access_level: params[:access_level])
+    end
+
+    if params[:status].present?
+      status_value = params[:status] == 'true'
+      access_points_relation = access_points_relation.where(status: status_value)
     end
 
     # Paginate the relation instead of an array
