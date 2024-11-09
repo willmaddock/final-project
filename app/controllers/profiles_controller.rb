@@ -35,7 +35,7 @@ class ProfilesController < ApplicationController
 
   # GET /profiles/1/edit
   def edit
-    @users = User.where.not(id: Profile.select(:user_id)) # Load users without profiles for selection
+    @users = User.where(id: @profile.user_id) # Restrict to the user associated with the profile being edited
   end
 
   # POST /profiles or /profiles.json

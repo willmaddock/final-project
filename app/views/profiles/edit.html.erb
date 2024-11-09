@@ -1,10 +1,32 @@
 <h1>Editing Profile</h1>
 
-<%= render "form", profile: @profile %> <!-- Render the form partial for editing the profile -->
+<%= form_with(model: @profile) do |form| %>
+  <div class="form-group">
+    <%= form.label :user_id, "User" %>
+    <%= form.collection_select :user_id, @users, :id, :username, {}, { class: 'form-select', disabled: true } %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :bio %>
+    <%= form.text_area :bio, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :location %>
+    <%= form.text_field :location, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :avatar %>
+    <%= form.file_field :avatar, class: 'form-control' %>
+  </div>
+
+  <%= form.submit "Update Profile", class: "btn btn-primary" %>
+<% end %>
 
 <br>
 
 <div>
-  <%= link_to "Show this profile", @profile, class: "btn btn-info" %> | <!-- Link to view the profile -->
-  <%= link_to "Back to profiles", profiles_path, class: "btn btn-secondary" %> <!-- Link to go back to profiles list -->
+  <%= link_to "Show this profile", @profile, class: "btn btn-info" %> |
+  <%= link_to "Back to profiles", profiles_path, class: "btn btn-secondary" %>
 </div>
