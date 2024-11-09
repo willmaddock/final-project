@@ -10,50 +10,57 @@
     </div>
   <% end %>
 
+  <!-- Username Field -->
   <div class="mb-3">
     <%= form.label :username, class: "form-label" %>
-    <%= form.text_field :username, class: "form-control", required: true %>
+    <%= form.text_field :username, class: "form-control", required: true, placeholder: "Enter username" %>
   </div>
 
+  <!-- Password Field -->
   <div class="mb-3">
     <%= form.label :password, class: "form-label" %>
-    <%= form.password_field :password, class: "form-control" %>
+    <%= form.password_field :password, class: "form-control", placeholder: "Enter password" %>
     <small class="form-text text-muted">Leave blank if you do not want to change the password. A default password will be set if none is provided.</small>
   </div>
 
+  <!-- Full Name Field -->
   <div class="mb-3">
     <%= form.label :full_name, class: "form-label" %>
-    <%= form.text_field :full_name, class: "form-control", required: true %>
+    <%= form.text_field :full_name, class: "form-control", required: true, placeholder: "Enter full name" %>
   </div>
 
+  <!-- Email Field -->
   <div class="mb-3">
     <%= form.label :email, class: "form-label" %>
-    <%= form.email_field :email, class: "form-control", required: true %>
+    <%= form.email_field :email, class: "form-control", required: true, placeholder: "Enter email address" %>
   </div>
 
-  <!-- Dropdown for Role -->
+  <!-- Role Dropdown -->
   <div class="mb-3">
     <%= form.label :role, class: "form-label" %>
-    <%= form.select :role, User.roles.keys.map { |r| [r.humanize, r] }, { include_blank: true }, class: "form-control" %>
+    <%= form.select :role, User.roles.keys.map { |r| [r.humanize, r] }, { include_blank: "Select a role" }, class: "form-control" %>
   </div>
 
-  <!-- Dropdown for Access Level -->
+  <!-- Access Level Dropdown -->
   <div class="mb-3">
     <%= form.label :access_level, class: "form-label" %>
     <%= form.select :access_level, options_for_select(['1', '2', '3', '4', '5'], user.access_level), {}, class: "form-control" %>
   </div>
 
+  <!-- Last Login Field -->
   <div class="mb-3">
     <%= form.label :last_login, class: "form-label" %>
     <%= form.datetime_field :last_login, class: "form-control", value: user.last_login.try(:strftime, '%Y-%m-%d %H:%M') %>
   </div>
 
+  <!-- Status Checkbox -->
   <div class="mb-3 form-check">
     <%= form.check_box :status, class: "form-check-input" %>
     <%= form.label :status, "Active?", class: "form-check-label" %>
   </div>
 
+  <!-- Submit Button -->
   <div>
-    <%= form.submit class: "btn btn-primary" %>
+    <%= form.submit "Save User", class: "btn btn-primary" %>
   </div>
 <% end %>

@@ -1,10 +1,16 @@
 <h1>Editing Access Point</h1>
 
+<% if flash[:alert] %>
+  <div class="alert alert-danger"><%= flash[:alert] %></div>
+<% end %>
+
+<% if flash[:notice] %>
+  <div class="alert alert-success"><%= flash[:notice] %></div>
+<% end %>
+
 <%= render "form", access_point: @access_point %>
 
-<br>
-
-<div>
+<div class="mt-3">
   <%= link_to "Show this Access Point", @access_point, class: 'btn btn-secondary' %> |
   <%= link_to "Back to Access Points", access_points_path, class: 'btn btn-light' %>
 </div>

@@ -1,40 +1,46 @@
 <h1>Elevated Access Request Details</h1>
 
 <% if notice %>
-  <div class="alert alert-success" role="alert" style="color: green;">
+  <div class="alert alert-success" role="alert">
     <%= notice %>
   </div>
 <% end %>
 
-<div id="<%= dom_id @elevated_access_request %>" class="elevated-access-request card shadow-sm border-0 p-4 mb-4">
-  <h2 class="card-title">Request Information</h2>
+<% if @elevated_access_request %>
+  <div id="<%= dom_id @elevated_access_request %>" class="elevated-access-request card shadow-sm border-0 p-4 mb-4">
+    <h2 class="card-title">Request Information</h2>
 
-  <div class="card-body">
-    <p>
-      <strong>User:</strong>
-      <%= @elevated_access_request.user.full_name %>
-    </p>
+    <div class="card-body">
+      <p>
+        <strong>User:</strong>
+        <%= @elevated_access_request.user.present? ? @elevated_access_request.user.full_name : "User not found" %>
+      </p>
 
-    <p>
-      <strong>Access Point:</strong>
-      <%= @elevated_access_request.access_point.location %>
-    </p>
+      <p>
+        <strong>Access Point:</strong>
+        <%= @elevated_access_request.access_point.present? ? @elevated_access_request.access_point.location : "Access point not found" %>
+      </p>
 
-    <p>
-      <strong>Reason:</strong>
-      <%= @elevated_access_request.reason %>
-    </p>
+      <p>
+        <strong>Reason:</strong>
+        <%= @elevated_access_request.reason.presence || "No reason provided" %>
+      </p>
 
-    <p>
-      <strong>Status:</strong>
-      <%= @elevated_access_request.status.humanize %>
-    </p>
+      <p>
+        <strong>Status:</strong>
+        <%= @elevated_access_request.status.present? ? @elevated_access_request.status.humanize : "Status unknown" %>
+      </p>
+    </div>
   </div>
-</div>
 
-<div class="text-center mt-3">
-  <%= link_to "Submit Elevated Access Requests", elevated_access_requests_path, class: 'btn btn-primary' %>
-  <%= link_to "Edit this Elevated Access Request", edit_elevated_access_request_path(@elevated_access_request), class: 'btn btn-secondary' %> |
+  <div class="text-center mt-3">
+    <%= link_to "Back to Elevated Access Requests", elevated_access_requests_path, class: 'btn btn-primary' %>
+    <%= link_to "Edit this Elevated Access Request", edit_elevated_access_request_path(@elevated_access_request), class: 'btn btn-secondary' %> |
 
-  <%= button_to "Cancel Elevated Access Request", @elevated_access_request, method: :delete, data: { confirm: "Are you sure you want to cancel this elevated access request?" }, class: 'btn btn-danger' %>
-</div>
+    <%= button_to "Cancel Elevated Access Request", @elevated_access_request, method: :delete, data: { confirm: "Are you sure you want to cancel this elevated access request?" }, class: 'btn btn-danger' %>
+  </div>
+<% else %>
+  <div class="alert alert-warning" role="alert">
+    Elevated Access Request not found.
+  </div>
+<% end %>

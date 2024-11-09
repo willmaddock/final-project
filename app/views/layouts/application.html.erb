@@ -14,18 +14,20 @@
 </head>
 
 <body>
-<%= render 'layouts/header' %>
+<header>
+  <%= render 'layouts/header' %>
+</header>
 
-<% if notice %>
-  <p style="color: green"><%= notice %></p>
-<% end %>
-<% if alert %>
-  <p style="color: red"><%= alert %></p>
-<% end %>
+<main class="container mt-4">
+  <% if notice %>
+    <div class="alert alert-success"><%= notice %></div>
+  <% end %>
+  <% if alert %>
+    <div class="alert alert-danger"><%= alert %></div>
+  <% end %>
 
-<div class="container mt-4">
   <%= yield %>
-</div>
+</main>
 
 <!-- Load Popper.js and Bootstrap JS from CDN -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gyb/43iD1pF8i4w0K4Xt4p4iV/pjZEX3LDgXgq6W2YtGrEGhK" crossorigin="anonymous"></script>

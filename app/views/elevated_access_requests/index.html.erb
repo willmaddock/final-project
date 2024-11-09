@@ -26,41 +26,48 @@
       </div>
     </div>
 
-    <!-- Removed extra submit button div -->
     <%= f.submit "Search", class: 'btn btn-primary mt-3' %>
   <% end %>
 </div>
 
-<div id="elevated_access_requests">
-  <table class="table">
-    <thead>
-    <tr>
-      <th>User</th>
-      <th>Access Point</th>
-      <th>Reason</th>
-      <th>Status</th>
-      <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% @elevated_access_requests.each do |request| %>
+<div id="elevated_access_requests" class="mt-4">
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
       <tr>
-        <td><%= request.user.full_name %></td>
-        <td><%= request.access_point.location %></td>
-        <td><%= request.reason %></td>
-        <td><%= request.status.humanize %></td>
-        <td>
-          <% if request.status == 'pending' %>
-            <%= button_to 'Approve', approve_elevated_access_request_path(request), method: :post, class: 'btn btn-success' %>
-            <%= button_to 'Deny', deny_elevated_access_request_path(request), method: :post, class: 'btn btn-danger' %>
-          <% else %>
-            <p><strong>Status:</strong> <%= request.status.humanize %></p>
-          <% end %>
-        </td>
+        <th>User</th>
+        <th>Access Point</th>
+        <th>Reason</th>
+        <th>Status</th>
+        <th>Actions</th>
       </tr>
-    <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+      <% @elevated_access_requests.each do |request| %>
+        <tr>
+          <td><%= request.user.full_name %></td>
+          <td><%= request.access_point.location %></td>
+          <td><%= request.reason %></td>
+          <td><%= request.status.humanize %></td>
+          <td>
+            <% if request.status == 'pending' %>
+              <%= button_to 'Approve', approve_elevated_access_request_path(request), method: :post, class: 'btn btn-success' %>
+              <%= button_to 'Deny', deny_elevated_access_request_path(request), method: :post, class: 'btn btn-danger' %>
+            <% else %>
+              <!-- Removed the View Details link -->
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <% if @elevated_access_requests.empty? %>
+    <div class="alert alert-warning" role="alert">
+      No elevated access requests found matching your criteria.
+    </div>
+  <% end %>
 </div>
 
 <div class="pagination">

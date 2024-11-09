@@ -5,7 +5,7 @@
     <%= form_with model: @elevated_access_request, local: true do |f| %>
       <div class="mb-3">
         <%= f.label :reason, "Reason", class: "form-label" %>
-        <%= f.text_area :reason, class: "form-control", rows: 3 %>
+        <%= f.text_area :reason, class: "form-control", rows: 3, placeholder: "Enter the reason for the access request" %>
       </div>
       <div class="text-center">
         <%= f.submit "Update Reason", class: 'btn btn-primary' %>

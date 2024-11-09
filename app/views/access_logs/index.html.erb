@@ -21,13 +21,13 @@
     <!-- Dropdown for Success Status -->
     <div class="col-auto">
       <%= label_tag :success, "Success", class: "form-label" %>
-      <%= select_tag :success, options_for_select([['All', ''], ['Yes', 'true'], ['No', 'false']], params[:success]), class: "form-select", onchange: 'this.form.submit();' %>
+      <%= select_tag :success, options_for_select([['All', ''], ['Yes', true], ['No', false]], params[:success]), class: "form-select", onchange: 'this.form.submit();' %>
     </div>
 
     <!-- Date Dropdown -->
     <div class="col-auto">
       <%= label_tag :date, "Select Date", class: "form-label" %>
-      <%= select_tag :date, options_for_select(AccessLog.pluck(:timestamp).map { |t| [t.to_date, t.to_date] }.uniq, params[:date]), include_blank: "All", class: "form-select", onchange: 'this.form.submit();' %>
+      <%= select_tag :date, options_for_select(AccessLog.pluck(:timestamp).map { |t| [t.strftime('%m/%d/%Y'), t.to_date] }.uniq, params[:date]), include_blank: "All", class: "form-select", onchange: 'this.form.submit();' %>
     </div>
 
     <!-- Records per Page Dropdown -->
@@ -54,7 +54,7 @@
       <tr>
         <td><%= access_log.user.username %></td>
         <td><%= access_log.access_point.location %></td>
-        <td><%= access_log.timestamp %></td>
+        <td><%= access_log.timestamp.strftime('%m/%d/%Y %H:%M') %></td>
         <td><%= access_log.successful ? 'Yes' : 'No' %></td>
         <td><%= link_to 'Show', access_log_path(access_log), class: 'btn btn-info btn-sm' %></td>
         <td><%= link_to 'Edit', edit_access_log_path(access_log), class: 'btn btn-warning btn-sm' %></td>

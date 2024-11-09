@@ -14,7 +14,7 @@
               </li>
             <% end %>
             <li>
-              <%= link_to 'Logout', destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: 'dropdown-item' %>
+              <%= link_to 'Logout', destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: 'dropdown-item', aria: { label: 'Logout' } %>
             </li>
           <% else %>
             <li>

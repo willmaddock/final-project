@@ -1,17 +1,17 @@
-<div id="<%= dom_id(profile) %>">
+<div id="<%= dom_id(profile) %>" class="profile-details mb-3 p-3 border rounded"> <!-- Added classes for styling -->
   <p>
     <strong>User:</strong>
-    <%= profile.user_id %>
+    <%= profile.user.username %> <!-- Assuming you want to display the username instead of user_id -->
   </p>
 
   <p>
     <strong>Bio:</strong>
-    <%= profile.bio %>
+    <%= profile.bio.present? ? profile.bio : "No bio available." %> <!-- Handle empty bio gracefully -->
   </p>
 
   <p>
     <strong>Location:</strong>
-    <%= profile.location %>
+    <%= profile.location.present? ? profile.location : "Location not specified." %> <!-- Handle empty location -->
   </p>
 
   <p>

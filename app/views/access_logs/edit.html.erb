@@ -8,3 +8,9 @@
   <%= link_to "Show this Access Log", @access_log, class: 'btn btn-info' %> |
   <%= link_to "Back to Access Logs", access_logs_path, class: 'btn btn-secondary' %>
 </div>
+
+<% if flash[:notice] %>
+  <div class="alert alert-success">
+    <%= flash[:notice] %>
+  </div>
+<% end %>

@@ -1,5 +1,17 @@
 <h1><%= @access_point.new_record? ? 'New Access Point' : 'Edit Access Point' %></h1>
 
+<% if flash[:notice] %>
+  <div class="alert alert-success">
+    <%= flash[:notice] %>
+  </div>
+<% elsif flash[:alert] %>
+  <div class="alert alert-danger">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
+
 <%= render "form", access_point: @access_point %>
 
-<%= link_to "Back to Access Points", access_points_path, class: 'btn btn-light mt-3' %>
+<div class="mt-3">
+  <%= link_to "Back to Access Points", access_points_path, class: 'btn btn-light' %>
+</div>

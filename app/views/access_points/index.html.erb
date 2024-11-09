@@ -2,8 +2,6 @@
 
 <h1>Access Points</h1>
 
-<%= link_to 'New Access Point', new_access_point_path, class: 'btn btn-primary mb-3' %>
-
 <% if flash[:alert] %>
   <div class="alert alert-danger"><%= flash[:alert] %></div>
 <% end %>
@@ -12,31 +10,36 @@
   <div class="alert alert-success"><%= flash[:notice] %></div>
 <% end %>
 
+<%= link_to 'New Access Point', new_access_point_path, class: 'btn btn-primary mb-3' %>
+
 <!-- Combined Filtering and Records per Page Form in a Row -->
 <%= form_with(url: access_points_path, method: :get, local: true) do |form| %>
   <div class="d-flex align-items-center mb-3">
     <div class="me-3">
-      <%= form.label :location, "Location:" %>
+      <%= form.label :location, "Location:", class: "form-label" %>
       <%= form.select :location, AccessPoint.select(:location).distinct.map { |ap| [ap.location, ap.location] },
                       { include_blank: 'Select Location' },
-                      { class: 'form-control', onchange: 'this.form.submit();' } %>
+                      { class: 'form-control' } %>
     </div>
     <div class="me-3">
-      <%= form.label :access_level, "Access Level:" %>
+      <%= form.label :access_level, "Access Level:", class: "form-label" %>
       <%= form.select :access_level, AccessPoint.select(:access_level).distinct.map { |ap| [ap.access_level, ap.access_level] },
                       { include_blank: 'Select Access Level' },
-                      { class: 'form-control', onchange: 'this.form.submit();' } %>
+                      { class: 'form-control' } %>
     </div>
     <div class="me-3">
-      <%= form.label :status, "Status:" %>
+      <%= form.label :status, "Status:", class: "form-label" %>
       <%= form.select :status, [['Active', true], ['Inactive', false]],
                       { include_blank: 'Select Status' },
-                      { class: 'form-control', onchange: 'this.form.submit();' } %>
+                      { class: 'form-control' } %>
     </div>
     <div>
-      <%= form.label :per_page, "Records per page:" %>
+      <%= form.label :per_page, "Records per page:", class: "form-label" %>
       <%= form.select :per_page, [10, 20, 30], { selected: params[:per_page] || 10 },
-                      { class: "form-select", onchange: 'this.form.submit();' } %>
+                      { class: "form-select" } %>
+    </div>
+    <div class="ms-3">
+      <%= form.submit "Filter", class: 'btn btn-primary' %>
     </div>
   </div>
 <% end %>
@@ -59,7 +62,9 @@
         <td><%= access_point.location %></td>
         <td><%= access_point.access_level %></td>
         <td><%= access_point.description %></td>
-        <td><%= access_point.status ? 'Active' : 'Inactive' %></td>
+        <td><span class="<%= access_point.status ? 'text-success' : 'text-danger' %>">
+            <%= access_point.status ? 'Active' : 'Inactive' %>
+          </span></td>
         <td><%= link_to 'Show', access_point, class: 'btn btn-info' %></td>
         <td><%= link_to 'Edit', edit_access_point_path(access_point), class: 'btn btn-warning' %></td>
         <td>
@@ -70,5 +75,11 @@
     </tbody>
   </table>
 </div>
+
+<% if @access_points.empty? %>
+  <div class="alert alert-warning" role="alert">
+    No access points found matching your criteria.
+  </div>
+<% end %>
 
 <%= paginate @access_points %>

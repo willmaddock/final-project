@@ -15,17 +15,19 @@
 
     <div class="mb-3">
       <%= form.label :user_id, "Requesting User", class: 'form-label' %>
-      <%= form.collection_select :user_id, User.where(role: 'shipping_agent'), :id, :full_name, { prompt: "Select Shipping Agent" }, { class: 'form-select' } %>
+      <%= form.collection_select :user_id, User.where(role: 'shipping_agent').order(:full_name), :id, :full_name, { prompt: "Select Shipping Agent" }, { class: 'form-select', aria: { describedby: 'userHelp' } } %>
+      <small id="userHelp" class="form-text text-muted">Please select the shipping agent requesting access.</small>
     </div>
 
     <div class="mb-3">
       <%= form.label :access_point_id, "Access Point", class: 'form-label' %>
-      <%= form.collection_select :access_point_id, AccessPoint.all, :id, :location, { prompt: "Select Access Point" }, { class: 'form-select' } %>
+      <%= form.collection_select :access_point_id, AccessPoint.all.order(:location), :id, :location, { prompt: "Select Access Point" }, { class: 'form-select', aria: { describedby: 'accessPointHelp' } } %>
+      <small id="accessPointHelp" class="form-text text-muted">Please select the access point for which access is requested.</small>
     </div>
 
     <div class="mb-3">
       <%= form.label :reason, class: 'form-label' %>
-      <%= form.text_area :reason, class: 'form-control', rows: 3 %>
+      <%= form.text_area :reason, class: 'form-control', rows: 3, placeholder: "Enter the reason for access request" %>
     </div>
 
     <div class="text-center">

@@ -1,21 +1,25 @@
-<div id="<%= dom_id access_log %>">
-  <p>
-    <strong>User:</strong>
-    <%= access_log.user.username %> <!-- Assuming user has a username attribute -->
-  </p>
+<div class="card mb-3" id="<%= dom_id access_log %>">
+  <div class="card-body">
+    <h5 class="card-title">Access Log Details</h5>
 
-  <p>
-    <strong>Access Point:</strong>
-    <%= access_log.access_point.location %> <!-- Using location instead of name -->
-  </p>
+    <p>
+      <strong>User:</strong>
+      <%= access_log.user.username if access_log.user %> <!-- Check if user exists -->
+    </p>
 
-  <p>
-    <strong>Timestamp:</strong>
-    <%= access_log.timestamp.strftime("%B %d, %Y at %I:%M %p") if access_log.timestamp %>
-  </p>
+    <p>
+      <strong>Access Point:</strong>
+      <%= access_log.access_point.location if access_log.access_point %> <!-- Check if access point exists -->
+    </p>
 
-  <p>
-    <strong>Successful:</strong>
-    <%= access_log.successful ? 'Yes' : 'No' %>
-  </p>
+    <p>
+      <strong>Timestamp:</strong>
+      <%= access_log.timestamp.strftime("%B %d, %Y at %I:%M %p") if access_log.timestamp %>
+    </p>
+
+    <p>
+      <strong>Successful:</strong>
+      <%= access_log.successful ? 'Yes' : 'No' %>
+    </p>
+  </div>
 </div>

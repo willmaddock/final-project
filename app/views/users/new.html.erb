@@ -1,15 +1,22 @@
-<h1>Create New User</h1>
+<!-- Page Title -->
+<h1 class="mb-4">Create New User</h1>
 
+<!-- Flash Messages -->
 <% if flash[:notice] %>
   <div class="alert alert-success"><%= flash[:notice] %></div>
 <% elsif flash[:alert] %>
   <div class="alert alert-danger"><%= flash[:alert] %></div>
 <% end %>
 
-<p>Please fill in the details below to create a new user.</p>
+<!-- Instruction Text -->
+<p class="mb-3 text-muted">Please fill in the details below to create a new user.</p>
 
-<%= render "form", user: @user %>
+<!-- Form Partial -->
+<div class="card shadow-sm p-4 mb-4">
+  <%= render "form", user: @user %>
+</div>
 
+<!-- Back Button -->
 <div class="mt-3">
   <%= link_to "Back to Users", users_path, class: "btn btn-secondary" %>
 </div>

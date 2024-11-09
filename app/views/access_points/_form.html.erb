@@ -20,7 +20,6 @@
     <% end %>
   </div>
 
-  <!-- Dropdown for Access Level -->
   <div class="form-group">
     <%= form.label :access_level, class: "form-label" %>
     <%= form.select :access_level, options_for_select(['1', '2', '3', '4', '5'], access_point.access_level), {}, class: "form-control #{'is-invalid' if access_point.errors[:access_level].any?}" %>

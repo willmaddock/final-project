@@ -1,6 +1,6 @@
 <%= form_with(model: access_log) do |form| %>
   <% if access_log.errors.any? %>
-    <div style="color: red">
+    <div class="alert alert-danger">
       <h2><%= pluralize(access_log.errors.count, "error") %> prohibited this access log from being saved:</h2>
       <ul>
         <% access_log.errors.full_messages.each do |error| %>
@@ -11,24 +11,23 @@
   <% end %>
 
   <div class="form-group mb-3">
-    <%= form.label :user_id, style: "display: block" %>
+    <%= form.label :user_id, class: 'form-label' %>
     <%= form.collection_select :user_id, User.all, :id, :username, { prompt: "Select a user" }, class: 'form-select' %>
   </div>
 
   <div class="form-group mb-3">
-    <%= form.label :access_point_id, style: "display: block" %>
-    <%= form.collection_select :access_point_id, AccessPoint.all, :id, :location, { prompt: "Select an access point" }, class: 'form-select' %> <!-- Change this if necessary -->
+    <%= form.label :access_point_id, class: 'form-label' %>
+    <%= form.collection_select :access_point_id, AccessPoint.all, :id, :location, { prompt: "Select an access point" }, class: 'form-select' %>
   </div>
 
   <div class="form-group mb-3">
-    <%= form.label :timestamp, style: "display: block" %>
-    <%= form.datetime_field :timestamp, class: 'form-control' %>
+    <%= form.label :timestamp, class: 'form-label' %>
+    <%= form.datetime_field :timestamp, class: 'form-control', placeholder: "YYYY-MM-DD HH:MM:SS" %>
   </div>
 
-  <div class="form-group mb-3">
-    <%= form.label :successful, style: "display: block" %>
-    <%= form.check_box :successful %>
-    <span>Successful?</span>  <!-- Added label for checkbox -->
+  <div class="form-group mb-3 form-check">
+    <%= form.check_box :successful, class: 'form-check-input' %>
+    <%= form.label :successful, 'Successful?', class: 'form-check-label' %>
   </div>
 
   <div>

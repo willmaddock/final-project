@@ -3,8 +3,8 @@
     <div class="alert alert-danger">
       <h2><%= pluralize(elevated_access_request.errors.count, "error") %> prohibited this elevated access request from being saved:</h2>
       <ul>
-        <% elevated_access_request.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+        <% elevated_access_request.errors.full_messages.each do |error| %>
+          <li><%= error %></li>
         <% end %>
       </ul>
     </div>
@@ -12,22 +12,22 @@
 
   <div class="mb-3">
     <%= form.label :user_id, class: "form-label" %>
-    <%= form.text_field :user_id, class: "form-control" %>
+    <%= form.select :user_id, User.all.collect { |user| [user.full_name, user.id] }, { include_blank: "Select User" }, class: "form-control" %>
   </div>
 
   <div class="mb-3">
     <%= form.label :access_point_id, class: "form-label" %>
-    <%= form.text_field :access_point_id, class: "form-control" %>
+    <%= form.select :access_point_id, AccessPoint.all.collect { |point| [point.location, point.id] }, { include_blank: "Select Access Point" }, class: "form-control" %>
   </div>
 
   <div class="mb-3">
     <%= form.label :reason, class: "form-label" %>
-    <%= form.text_area :reason, class: "form-control", rows: 3 %>
+    <%= form.text_area :reason, class: "form-control", rows: 3, placeholder: "Enter reason for the access request" %>
   </div>
 
   <div class="mb-3">
     <%= form.label :status, class: "form-label" %>
-    <%= form.text_field :status, class: "form-control" %>
+    <%= form.select :status, [['Pending', 'pending'], ['Approved', 'approved'], ['Denied', 'denied']], { include_blank: "Select Status" }, class: "form-control" %>
   </div>
 
   <div>

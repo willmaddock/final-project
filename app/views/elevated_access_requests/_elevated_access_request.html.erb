@@ -4,22 +4,24 @@
   <div class="card-body">
     <p>
       <strong>User:</strong>
-      <%= elevated_access_request.user.full_name %>
+      <%= elevated_access_request.user.present? ? elevated_access_request.user.full_name : "N/A" %>
     </p>
 
     <p>
       <strong>Access Point:</strong>
-      <%= elevated_access_request.access_point.location %>
+      <%= elevated_access_request.access_point.present? ? elevated_access_request.access_point.location : "N/A" %>
     </p>
 
     <p>
       <strong>Reason:</strong>
-      <%= elevated_access_request.reason %>
+      <%= elevated_access_request.reason.present? ? elevated_access_request.reason : "No reason provided" %>
     </p>
 
     <p>
       <strong>Status:</strong>
-      <%= elevated_access_request.status.humanize %>
+      <span class="<%= elevated_access_request.status == 'approved' ? 'text-success' : elevated_access_request.status == 'denied' ? 'text-danger' : 'text-warning' %>">
+        <%= elevated_access_request.status.humanize %>
+      </span>
     </p>
   </div>
 

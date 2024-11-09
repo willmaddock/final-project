@@ -1,9 +1,13 @@
+<!-- Flash Notice -->
 <p class="text-success"><%= notice %></p>
 
-<h1>Users</h1>
+<!-- Page Title and New User Button -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Users</h1>
+  <%= link_to 'New User', new_user_path, class: 'btn btn-primary' %>
+</div>
 
-<%= link_to 'New User', new_user_path, class: 'btn btn-primary mb-3' %>
-
+<!-- Filters Form -->
 <%= form_with(url: users_path, method: :get, local: true) do |form| %>
   <div class="row mb-3">
     <div class="col">
@@ -11,31 +15,26 @@
       <%= form.select :per_page, [10, 20, 30], { selected: params[:per_page] || 10 },
                       { class: "form-select", onchange: 'submitPerPageForm(this.form);' } %>
     </div>
-
     <div class="col">
       <%= form.label :username, "Username", class: "form-label" %>
       <%= form.select :username, User.pluck(:username).uniq.map { |u| [u, u] }, { include_blank: true },
                       { class: "form-select", onchange: 'this.form.submit();' } %>
     </div>
-
     <div class="col">
       <%= form.label :full_name, "Full Name", class: "form-label" %>
       <%= form.select :full_name, User.pluck(:full_name).uniq.map { |n| [n, n] }, { include_blank: true },
                       { class: "form-select", onchange: 'this.form.submit();' } %>
     </div>
-
     <div class="col">
       <%= form.label :email, "Email", class: "form-label" %>
       <%= form.select :email, User.pluck(:email).uniq.map { |e| [e, e] }, { include_blank: true },
                       { class: "form-select", onchange: 'this.form.submit();' } %>
     </div>
-
     <div class="col">
       <%= form.label :role, "Role", class: "form-label" %>
       <%= form.select :role, User.roles.keys.map { |role| [role.humanize, role] }, { include_blank: true },
                       { class: "form-select", onchange: 'this.form.submit();' } %>
     </div>
-
     <div class="col">
       <%= form.label :status, "Status", class: "form-label" %>
       <%= form.select :status, [['All', ''], ['Active', 'active'], ['Inactive', 'inactive']],
@@ -44,6 +43,7 @@
   </div>
 <% end %>
 
+<!-- Users Table -->
 <% if @users.any? %>
   <table class="table table-striped">
     <thead>
@@ -72,13 +72,13 @@
     </tbody>
   </table>
 
-  <!-- Update pagination to include the per_page parameter -->
+  <!-- Pagination with per_page parameter -->
   <%= paginate @users, params: { per_page: params[:per_page] } %>
 <% else %>
-  <p>No users found.</p>
+  <p class="text-muted">No users found.</p>
 <% end %>
 
-<!-- JavaScript function to ensure form submits on dropdown change -->
+<!-- JavaScript to auto-submit form on dropdown change -->
 <script>
     function submitPerPageForm(form) {
         form.submit();
