@@ -1,0 +1,52 @@
+/* app/assets/stylesheets/buttons.scss */
+
+/* General Button Styling */
+.btn {
+  font-weight: 500;
+  border-radius: 4px;
+  padding: 0.5rem 1.2rem;
+  transition: background-color 0.25s ease, color 0.25s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Edit Button - Warning */
+.btn-warning {
+  background-color: #ffca2c; /* Softer yellow */
+  color: #212529;
+  border: none;
+
+  &:hover {
+    background-color: #e6b029; /* Slightly darker yellow */
+    color: #212529;
+  }
+
+  &:focus {
+    outline: 2px solid rgba(255, 193, 7, 0.5);
+  }
+}
+
+/* Delete Button - Danger */
+.btn-danger {
+  background-color: #e63946; /* Muted red */
+  color: #fff;
+  border: none;
+
+  &:hover {
+    background-color: #b6323d; /* Darker red on hover */
+  }
+
+  &:focus {
+    outline: 2px solid rgba(220, 53, 69, 0.5);
+  }
+}
+
+/* Back Button - Secondary */
+.btn-secondary {
+  background-color: #6c757d;
+  color: #fff;
+  border: none;
+
+  &:hover {
+    background-color: #5a6268;
+  }
+}
