@@ -5,7 +5,16 @@ class UsersController < ApplicationController
   # GET /users or /users.json
   def index
     per_page = (params[:per_page].presence || 10).to_i  # Convert to integer and use default if not present
-    @users = User.page(params[:page]).per(per_page)
+    @users = User.all
+
+    # Apply filters based on the selected dropdown values
+    @users = @users.where("username LIKE ?", "%#{params[:username]}%") if params[:username].present?
+    @users = @users.where("full_name LIKE ?", "%#{params[:full_name]}%") if params[:full_name].present?
+    @users = @users.where("email LIKE ?", "%#{params[:email]}%") if params[:email].present?
+    @users = @users.where(role: params[:role]) if params[:role].present? && params[:role] != ''
+    @users = @users.where(status: params[:status]) if params[:status].present? && params[:status] != ''
+
+    @users = @users.page(params[:page]).per(per_page)
   rescue StandardError => e
     flash.now[:alert] = "Failed to load users: #{e.message}"
     @users = []  # Fallback to an empty array to prevent errors in the view
