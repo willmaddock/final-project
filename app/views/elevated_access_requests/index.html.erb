@@ -48,13 +48,19 @@
           <td><%= request.user.full_name %></td>
           <td><%= request.access_point.location %></td>
           <td><%= request.reason %></td>
-          <td><%= request.status.humanize %></td>
+          <td>
+              <span class="<%= case request.status
+                               when 'approved' then 'text-success'       # Green
+                               when 'denied' then 'text-danger'          # Red
+                               when 'pending' then 'text-warning'        # Amber/Yellow
+                               end %>">
+                <%= request.status.humanize %>
+              </span>
+          </td>
           <td>
             <% if request.status == 'pending' %>
               <%= button_to 'Approve', approve_elevated_access_request_path(request), method: :post, class: 'btn btn-success' %>
               <%= button_to 'Deny', deny_elevated_access_request_path(request), method: :post, class: 'btn btn-danger' %>
-            <% else %>
-              <!-- Removed the View Details link -->
             <% end %>
           </td>
         </tr>

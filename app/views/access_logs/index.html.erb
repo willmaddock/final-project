@@ -55,7 +55,11 @@
         <td><%= access_log.user.username %></td>
         <td><%= access_log.access_point.location %></td>
         <td><%= access_log.timestamp.strftime('%m/%d/%Y %H:%M') %></td>
-        <td><%= access_log.successful ? 'Yes' : 'No' %></td>
+        <td>
+            <span class="<%= access_log.successful ? 'text-success' : 'text-danger' %>">
+              <%= access_log.successful ? 'Yes' : 'No' %>
+            </span>
+        </td>
         <td><%= link_to 'Show', access_log_path(access_log), class: 'btn btn-info btn-sm' %></td>
         <td><%= link_to 'Edit', edit_access_log_path(access_log), class: 'btn btn-warning btn-sm' %></td>
         <td><%= button_to 'Delete', access_log, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' %></td>
