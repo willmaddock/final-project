@@ -1,17 +1,22 @@
+// app/assets/stylesheets/components/_header.scss
+
 header {
-  background-color: #f8f9fa; /* Light grey for header background */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  background-color: #f8f9fa; // Light grey for header background
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); // Subtle shadow
+  padding: 1rem;
 }
 
 .nav-link {
   transition: background-color 0.3s, color 0.3s;
+
+  &:hover {
+    background-color: #007bff; // Primary color on hover
+    color: white;
+  }
 }
 
-.nav-link:hover {
-  background-color: #007bff; /* Primary color on hover */
-  color: white;
-}
-
-.dropdown-item:hover {
-  background-color: #f1f1f1; /* Light grey on dropdown hover */
+.dropdown-item {
+  &:hover {
+    background-color: #f1f1f1; // Light grey on dropdown hover
+  }
 }
