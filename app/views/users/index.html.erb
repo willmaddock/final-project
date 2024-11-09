@@ -38,7 +38,7 @@
 
     <div class="col">
       <%= form.label :status, "Status", class: "form-label" %>
-      <%= form.select :status, [['Active', 'active'], ['Inactive', 'inactive'], ['All', '']],
+      <%= form.select :status, [['All', ''], ['Active', 'active'], ['Inactive', 'inactive']],
                       { selected: params[:status] }, { class: "form-select", onchange: 'this.form.submit();' } %>
     </div>
   </div>
