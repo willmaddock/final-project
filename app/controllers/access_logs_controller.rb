@@ -82,7 +82,7 @@ class AccessLogsController < ApplicationController
     @access_log.destroy!
 
     respond_to do |format|
-      format.html { redirect_to access_logs_path, status: :see_other, notice: "Access log was successfully destroyed." }
+      format.html { redirect_to access_logs_path, status: :see_other, notice: "Access log was successfully deleted." }
       format.json { head :no_content }
     end
   end

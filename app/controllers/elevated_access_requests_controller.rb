@@ -55,7 +55,7 @@ class ElevatedAccessRequestsController < ApplicationController
     @elevated_access_request.destroy!
 
     respond_to do |format|
-      format.html { redirect_to elevated_access_requests_path, status: :see_other, notice: "Elevated access request was successfully destroyed." }
+      format.html { redirect_to elevated_access_requests_path, status: :see_other, notice: "Elevated access request was successfully deleted." }
       format.json { head :no_content }
     end
   end

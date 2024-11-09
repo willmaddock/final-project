@@ -80,7 +80,7 @@ class AccessPointsController < ApplicationController
   def destroy
     respond_to do |format|
       if @access_point.destroy
-        format.html { redirect_to access_points_path, status: :see_other, notice: "Access point was successfully destroyed." }
+        format.html { redirect_to access_points_path, status: :see_other, notice: "Access point was successfully deleted." }
         format.json { head :no_content }
       else
         format.html { redirect_to access_point_path(@access_point), alert: "Access point could not be deleted due to dependent records." }

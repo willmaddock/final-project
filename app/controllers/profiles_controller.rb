@@ -66,7 +66,7 @@ class ProfilesController < ApplicationController
     @profile.destroy
 
     respond_to do |format|
-      format.html { redirect_to profiles_path, status: :see_other, notice: "Profile was successfully destroyed." }
+      format.html { redirect_to profiles_path, status: :see_other, notice: "Profile was successfully deleted." }
       format.json { head :no_content }
     end
   end
