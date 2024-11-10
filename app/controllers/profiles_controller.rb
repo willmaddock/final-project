@@ -1,5 +1,6 @@
 class ProfilesController < ApplicationController
   before_action :set_profile, only: %i[show edit update destroy]
+  before_action :authorize_profile!, only: %i[edit update destroy]  # Added authorization check for edit, update, and destroy
 
   # GET /profiles or /profiles.json
   def index
@@ -35,17 +36,20 @@ class ProfilesController < ApplicationController
   # GET /profiles/new
   def new
     @profile = Profile.new
+    @profile.user_id = current_user.id  # Automatically set user_id for the profile
     @users = User.where.not(id: Profile.select(:user_id)) # Load users without profiles for selection
   end
 
   # GET /profiles/1/edit
   def edit
+    # The profile user is already set in the before_action
     @users = User.where(id: @profile.user_id) # Restrict to the user associated with the profile being edited
   end
 
   # POST /profiles or /profiles.json
   def create
     @profile = Profile.new(profile_params)
+    @profile.user_id = current_user.id  # Automatically set user_id for the profile
 
     if @profile.save
       redirect_to @profile, notice: "Profile was successfully created."
@@ -80,21 +84,20 @@ class ProfilesController < ApplicationController
 
   # Authorization method to check user permissions for profile actions
   def authorize_profile!
-    case action_name
-    when 'new', 'create'
-      redirect_to root_path, alert: "You do not have permission to perform this action." unless current_user.can_create_profiles?
-    when 'edit', 'update'
-      redirect_to root_path, alert: "You do not have permission to perform this action." unless current_user.can_edit_profiles?
-    when 'destroy'
-      redirect_to root_path, alert: "You do not have permission to perform this action." unless current_user.can_delete_profiles?
-    else
+    # Allow admins and logistics managers to edit any profile
+    if current_user.admin? || current_user.logistics_manager?
       return true
+      # Allow the user to edit their own profile
+    elsif @profile.user == current_user
+      return true
+    else
+      redirect_to root_path, alert: "You do not have permission to perform this action."
     end
   end
 
   # Only allow a list of trusted parameters through.
   def profile_params
-    params.require(:profile).permit(:user_id, :bio, :location, :avatar)
+    params.require(:profile).permit(:bio, :location, :avatar)  # Do not permit user_id here
   end
 
   # Handle responses for create and update actions
