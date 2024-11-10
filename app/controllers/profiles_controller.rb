@@ -1,32 +1,23 @@
 class ProfilesController < ApplicationController
   before_action :set_profile, only: %i[show edit update destroy]
-  before_action :authorize_profile!, only: %i[edit update destroy]  # Added authorization check for edit, update, and destroy
+  before_action :authorize_profile!, only: %i[edit update destroy]
+  before_action :redirect_if_profile_exists, only: %i[new create]  # Ensure no duplicate profiles
 
   # GET /profiles or /profiles.json
   def index
     per_page = (params[:per_page].presence || 12).to_i
     @profiles = Profile.page(params[:page]).per(per_page)
 
-    # Filter by username if provided
-    if params[:username].present?
-      @profiles = @profiles.joins(:user).where('users.username = ?', params[:username])
-    end
-
-    # Filter by location if provided
-    if params[:location].present?
-      @profiles = @profiles.where(location: params[:location])
-    end
-
-    # Filter by email if provided
-    if params[:email].present?
-      @profiles = @profiles.joins(:user).where('users.email = ?', params[:email])
-    end
+    # Apply filters if provided
+    @profiles = @profiles.joins(:user).where('users.username = ?', params[:username]) if params[:username].present?
+    @profiles = @profiles.where(location: params[:location]) if params[:location].present?
+    @profiles = @profiles.joins(:user).where('users.email = ?', params[:email]) if params[:email].present?
 
     render 'index'
   rescue StandardError => e
     flash.now[:alert] = "Failed to load profiles: #{e.message}"
     @profiles = []
-    render 'index'  # Render the same template even in case of an error
+    render 'index'
   end
 
   # GET /profiles/1 or /profiles/1.json
@@ -36,32 +27,32 @@ class ProfilesController < ApplicationController
   # GET /profiles/new
   def new
     @profile = Profile.new
-    @profile.user_id = current_user.id  # Automatically set user_id for the profile
-    @users = User.where.not(id: Profile.select(:user_id)) # Load users without profiles for selection
+    @profile.user_id = current_user.id
+    @users = User.where.not(id: Profile.select(:user_id))
   end
 
   # GET /profiles/1/edit
   def edit
-    # The profile user is already set in the before_action
-    @users = User.where(id: @profile.user_id) # Restrict to the user associated with the profile being edited
+    @users = User.where(id: @profile.user_id)
   end
 
   # POST /profiles or /profiles.json
   def create
     @profile = Profile.new(profile_params)
-    @profile.user_id = current_user.id  # Automatically set user_id for the profile
+    @profile.user_id = current_user.id
 
     if @profile.save
       redirect_to @profile, notice: "Profile was successfully created."
     else
       flash.now[:alert] = @profile.errors.full_messages.to_sentence
-      @users = User.where.not(id: Profile.select(:user_id)) # Ensure users without profiles are available in case of render
+      @users = User.where.not(id: Profile.select(:user_id))
       render :new, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /profiles/1 or /profiles/1.json
   def update
+    @users = User.where(id: @profile.user_id)
     handle_response(@profile.update(profile_params), :edit, "Profile was successfully updated.")
   end
 
@@ -77,35 +68,33 @@ class ProfilesController < ApplicationController
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
   def set_profile
     @profile = Profile.find(params[:id])
   end
 
-  # Authorization method to check user permissions for profile actions
   def authorize_profile!
-    # Allow admins and logistics managers to edit any profile
-    if current_user.admin? || current_user.logistics_manager?
-      return true
-      # Allow the user to edit their own profile
-    elsif @profile.user == current_user
-      return true
+    if current_user.admin? || current_user.logistics_manager? || @profile.user == current_user
+      true
     else
       redirect_to root_path, alert: "You do not have permission to perform this action."
     end
   end
 
-  # Only allow a list of trusted parameters through.
-  def profile_params
-    params.require(:profile).permit(:bio, :location, :avatar)  # Do not permit user_id here
+  def redirect_if_profile_exists
+    if Profile.exists?(user_id: current_user.id)
+      redirect_to profile_path(current_user.profile), alert: "You already have a profile."
+    end
   end
 
-  # Handle responses for create and update actions
+  def profile_params
+    params.require(:profile).permit(:bio, :location, :avatar)
+  end
+
   def handle_response(success, render_action, notice)
     respond_to do |format|
       if success
         format.html { redirect_to @profile, notice: notice }
-        format.json { render :show, status: :created, location: @profile }
+        format.json { render :show, status: :ok, location: @profile }
       else
         format.html { render render_action, status: :unprocessable_entity }
         format.json { render json: @profile.errors, status: :unprocessable_entity }
