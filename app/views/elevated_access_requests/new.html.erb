@@ -1,5 +1,21 @@
 <h1 class="text-center mb-4">New Elevated Access Request</h1>
 
+<%# Role-based messages %>
+<% role_benefits = {
+  "shipping_agent" => "Allows tracking and approval of access requests, ensuring accurate security logs.",
+  "viewer" => "Enables viewing of access requests for transparency, without permissions to approve or deny.",
+  "logistics_manager" => "Provides access to track, approve, or deny elevated access requests, enhancing control.",
+  "admin" => "Central to approving, denying, and managing elevated access requests for comprehensive system security.",
+  "editor" => "Enables viewing and assisting in tracking requests, with limited ability to approve."
+} %>
+
+<%# Display the message for the current user’s role %>
+<% if user_signed_in? && role_benefits.key?(current_user.role) %>
+  <div class="alert alert-info">
+    <%= role_benefits[current_user.role] %>
+  </div>
+<% end %>
+
 <div class="container mt-5">
   <%= form_with(model: @elevated_access_request, local: true) do |form| %>
     <% if @elevated_access_request.errors.any? %>

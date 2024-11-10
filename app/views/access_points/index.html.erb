@@ -12,6 +12,22 @@
 
 <%= link_to 'New Access Point', new_access_point_path, class: 'btn btn-primary mb-3' %>
 
+<%# Define role-specific messages for access points %>
+<% role_benefits = {
+  "shipping_agent" => "Allows viewing and managing access points with detailed descriptions and status updates.",
+  "viewer" => "Provides visibility into access points and their status within the platform.",
+  "logistics_manager" => "Grants control over access points, with the ability to monitor and update statuses.",
+  "admin" => "Central to managing and updating all access points, including adding, editing, and deleting.",
+  "editor" => "Facilitates editing access points and updating their descriptions and statuses."
+} %>
+
+<%# Display the message for the current user’s role %>
+<% if user_signed_in? && role_benefits.key?(current_user.role) %>
+  <div class="alert alert-info">
+    <%= role_benefits[current_user.role] %>
+  </div>
+<% end %>
+
 <!-- Combined Filtering and Records per Page Form in a Row -->
 <%= form_with(url: access_points_path, method: :get, local: true) do |form| %>
   <div class="d-flex align-items-center mb-3">

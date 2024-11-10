@@ -1,5 +1,11 @@
-<!-- Flash Notice -->
-<p class="text-success"><%= notice %></p>
+<!-- Flash Notices -->
+<% if flash[:notice] %>
+  <div class="alert alert-success"><%= flash[:notice] %></div>
+<% end %>
+
+<% if flash[:alert] %>
+  <div class="alert alert-danger"><%= flash[:alert] %></div>
+<% end %>
 
 <!-- Page Title and New User Button -->
 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -7,79 +13,99 @@
   <%= link_to 'New User', new_user_path, class: 'btn btn-primary' %>
 </div>
 
+<%# Role-Specific Messages for Users %>
+<% role_benefits = {
+  "shipping_agent" => "Allows viewing and managing user information.",
+  "viewer" => "Provides visibility into user profiles.",
+  "logistics_manager" => "Grants control over user management, including status updates.",
+  "admin" => "Central to managing user roles, adding, editing, and deleting users.",
+  "editor" => "Facilitates editing of user information."
+} %>
+
+<%# Display the message for the current user’s role %>
+<% if user_signed_in? && role_benefits.key?(current_user.role) %>
+  <div class="alert alert-info">
+    <%= role_benefits[current_user.role] %>
+  </div>
+<% end %>
+
 <!-- Filters Form -->
 <%= form_with(url: users_path, method: :get, local: true) do |form| %>
-  <div class="row mb-3">
-    <div class="col">
-      <%= form.label :per_page, "Records per page:", class: "form-label" %>
-      <%= form.select :per_page, [10, 20, 30], { selected: params[:per_page] || 10 },
-                      { class: "form-select", onchange: 'submitPerPageForm(this.form);' } %>
-    </div>
-    <div class="col">
+  <div class="d-flex align-items-center mb-3">
+    <div class="me-3">
       <%= form.label :username, "Username", class: "form-label" %>
-      <%= form.select :username, User.pluck(:username).uniq.map { |u| [u, u] }, { include_blank: true },
+      <%= form.select :username, User.pluck(:username).uniq.map { |u| [u, u] }, { include_blank: 'Select Username' },
                       { class: "form-select", onchange: 'this.form.submit();' } %>
     </div>
-    <div class="col">
+    <div class="me-3">
       <%= form.label :full_name, "Full Name", class: "form-label" %>
-      <%= form.select :full_name, User.pluck(:full_name).uniq.map { |n| [n, n] }, { include_blank: true },
+      <%= form.select :full_name, User.pluck(:full_name).uniq.map { |n| [n, n] }, { include_blank: 'Select Full Name' },
                       { class: "form-select", onchange: 'this.form.submit();' } %>
     </div>
-    <div class="col">
+    <div class="me-3">
       <%= form.label :email, "Email", class: "form-label" %>
-      <%= form.select :email, User.pluck(:email).uniq.map { |e| [e, e] }, { include_blank: true },
+      <%= form.select :email, User.pluck(:email).uniq.map { |e| [e, e] }, { include_blank: 'Select Email' },
                       { class: "form-select", onchange: 'this.form.submit();' } %>
     </div>
-    <div class="col">
+    <div class="me-3">
       <%= form.label :role, "Role", class: "form-label" %>
-      <%= form.select :role, User.roles.keys.map { |role| [role.humanize, role] }, { include_blank: true },
+      <%= form.select :role, User.roles.keys.map { |role| [role.humanize, role] }, { include_blank: 'Select Role' },
                       { class: "form-select", onchange: 'this.form.submit();' } %>
     </div>
-    <div class="col">
+    <div class="me-3">
       <%= form.label :status, "Status", class: "form-label" %>
       <%= form.select :status, [['All', ''], ['Active', 'active'], ['Inactive', 'inactive']],
                       { selected: params[:status] }, { class: "form-select", onchange: 'this.form.submit();' } %>
+    </div>
+    <div>
+      <%= form.label :per_page, "Records per page:", class: "form-label" %>
+      <%= form.select :per_page, [10, 20, 30], { selected: params[:per_page] || 10 },
+                      { class: "form-select", onchange: 'submitPerPageForm(this.form);' } %>
     </div>
   </div>
 <% end %>
 
 <!-- Users Table -->
 <% if @users.any? %>
-  <table class="table table-striped">
-    <thead>
-    <tr>
-      <th>Username</th>
-      <th>Full Name</th>
-      <th>Email</th>
-      <th>Role</th>
-      <th>Status</th>
-      <th colspan="3">Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% @users.each do |user| %>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
       <tr>
-        <td><%= user.username %></td>
-        <td><%= user.full_name %></td>
-        <td><%= user.email %></td>
-        <td><%= user.role %></td>
-        <td>
-          <span class="<%= user.status ? 'text-success' : 'text-danger' %>">
-            <%= user.status ? 'Active' : 'Inactive' %>
-          </span>
-        </td>
-        <td><%= link_to 'Show', user_path(user), class: 'btn btn-info btn-sm' %></td>
-        <td><%= link_to 'Edit', edit_user_path(user), class: 'btn btn-warning btn-sm' %></td>
-        <td><%= button_to 'Delete', user, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' %></td>
+        <th>Username</th>
+        <th>Full Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th colspan="3" class="text-center">Actions</th>
       </tr>
-    <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= user.username %></td>
+          <td><%= user.full_name %></td>
+          <td><%= user.email %></td>
+          <td><%= user.role %></td>
+          <td>
+            <span class="<%= user.status ? 'text-success' : 'text-danger' %>">
+              <%= user.status ? 'Active' : 'Inactive' %>
+            </span>
+          </td>
+          <td><%= link_to 'Show', user_path(user), class: 'btn btn-info btn-sm' %></td>
+          <td><%= link_to 'Edit', edit_user_path(user), class: 'btn btn-warning btn-sm' %></td>
+          <td><%= button_to 'Delete', user, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
 
   <!-- Pagination with per_page parameter -->
   <%= paginate @users, params: { per_page: params[:per_page] } %>
 <% else %>
-  <p class="text-muted">No users found.</p>
+  <div class="alert alert-warning" role="alert">
+    No users found matching your criteria.
+  </div>
 <% end %>
 
 <!-- JavaScript to auto-submit form on dropdown change -->

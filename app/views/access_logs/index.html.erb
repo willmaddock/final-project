@@ -2,7 +2,25 @@
 
 <h1>Access Logs</h1>
 
+
+
 <%= link_to 'New Access Log', new_access_log_path, class: 'btn btn-primary mb-3' %>
+
+<%# Define role-specific messages %>
+<% role_benefits = {
+  "shipping_agent" => "Allows tracking of entry records, aiding in audit trails for security.",
+  "viewer" => "Enables viewing audit records for transparency on area access.",
+  "logistics_manager" => "Provides comprehensive tracking of all access events, aiding in security management.",
+  "admin" => "Central to monitoring access history and maintaining system security.",
+  "editor" => "Allows viewing audit records for maintaining data accuracy."
+} %>
+
+<%# Display the message for the current user’s role %>
+<% if user_signed_in? && role_benefits.key?(current_user.role) %>
+  <div class="alert alert-info">
+    <%= role_benefits[current_user.role] %>
+  </div>
+<% end %>
 
 <div class="row mb-3 gx-2">
   <%= form_with(url: access_logs_path, method: :get, local: true, class: "row") do |form| %>
