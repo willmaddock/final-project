@@ -1,8 +1,7 @@
 require 'faker'
-require 'open-uri' # Require open-uri to download images
+require 'open-uri'
 
-# Clear existing records only if you want to reset the database
-# Uncomment these lines if you want to start fresh each time you seed
+# Clear existing records if you want to reset the database (uncomment if needed)
 # User.destroy_all
 # Profile.destroy_all
 # AccessLog.destroy_all
@@ -19,53 +18,90 @@ require 'open-uri' # Require open-uri to download images
   )
 end
 
-# Create 50 users with profiles and access logs
-50.times do
-  # Generate a random password for each user
-  password = Faker::Internet.password(min_length: 8)
+# Create specific admin and logistics manager users for presentation
+admin_user = User.create!(
+  username: 'admin',
+  full_name: 'Admin User',
+  email: 'admin@example.com',
+  password: 'password',
+  password_confirmation: 'password',
+  role: 'admin',
+  access_level: 0,
+  status: true
+)
 
-  user = User.create!(
-    username: Faker::Internet.username,
-    full_name: Faker::Name.name,
-    email: Faker::Internet.email,
-    password: password, # Set the password for Devise
-    password_confirmation: password, # Ensure password confirmation matches
-    role: %w[admin editor viewer shipping_agent logistics_manager].sample, # Assign a random role
-    access_level: rand(1..5),
-    status: [true, false].sample
-  )
+logistics_manager_user = User.create!(
+  username: 'logistics_manager',
+  full_name: 'Logistics Manager',
+  email: 'logistics_manager@example.com',
+  password: 'password',
+  password_confirmation: 'password',
+  role: 'logistics_manager',
+  access_level: 4,
+  status: true
+)
 
-  # Create a profile for each user
+# Attach profiles for admin and logistics manager
+[admin_user, logistics_manager_user].each do |user|
   profile = Profile.new(
     user: user,
     bio: Faker::Lorem.sentence,
     location: Faker::Address.city
   )
 
-  # Attach an avatar image by downloading it
+  # Attach an avatar image for each
   begin
     avatar_url = Faker::Avatar.image
     file = URI.open(avatar_url)
-    profile.avatar.attach(io: file, filename: 'avatar.png', content_type: 'image/png') # Change content_type as necessary
+    profile.avatar.attach(io: file, filename: 'avatar.png', content_type: 'image/png')
   rescue OpenURI::HTTPError => e
     puts "Failed to fetch avatar for user #{user.id}: #{e.message}"
-    # Attach a default avatar if necessary
     profile.avatar.attach(io: File.open(Rails.root.join('path_to_default_avatar.png')), filename: 'default_avatar.png', content_type: 'image/png')
   end
 
-  profile.save! # This will raise an error if saving fails
+  profile.save!
+end
 
-  # Optionally, create some access logs for each user
+# Create additional random users with profiles, access logs, and elevated access requests
+50.times do
+  password = Faker::Internet.password(min_length: 8)
+  user = User.create!(
+    username: Faker::Internet.username,
+    full_name: Faker::Name.name,
+    email: Faker::Internet.email,
+    password: password,
+    password_confirmation: password,
+    role: %w[editor viewer shipping_agent].sample,
+    access_level: rand(1..5),
+    status: [true, false].sample
+  )
+
+  profile = Profile.new(
+    user: user,
+    bio: Faker::Lorem.sentence,
+    location: Faker::Address.city
+  )
+
+  begin
+    avatar_url = Faker::Avatar.image
+    file = URI.open(avatar_url)
+    profile.avatar.attach(io: file, filename: 'avatar.png', content_type: 'image/png')
+  rescue OpenURI::HTTPError => e
+    puts "Failed to fetch avatar for user #{user.id}: #{e.message}"
+    profile.avatar.attach(io: File.open(Rails.root.join('path_to_default_avatar.png')), filename: 'default_avatar.png', content_type: 'image/png')
+  end
+
+  profile.save!
+
   rand(1..5).times do
     AccessLog.create!(
       user: user,
-      access_point_id: rand(1..10), # Now we have 10 access points to reference
+      access_point_id: rand(1..10),
       timestamp: Time.now,
       successful: [true, false].sample
     )
   end
 
-  # Create elevated access requests only for shipping agents
   if user.role == 'shipping_agent'
     rand(1..3).times do
       ElevatedAccessRequest.create!(
