@@ -6,19 +6,24 @@ class User < ApplicationRecord
   enum role: { admin: 0, editor: 1, viewer: 2, shipping_agent: 3, logistics_manager: 4 }
 
   after_initialize do
-    self.role ||= :viewer if new_record?
+    self.role ||= :viewer if new_record? && role.nil?
   end
 
-  # Establish the relationship with Profile
-  has_one :profile, dependent: :destroy  # This will destroy the associated profile when the user is deleted
-  has_many :access_logs, dependent: :destroy # Ensure to add this if there's an AccessLog association
+  # Relationships
+  has_one :profile, dependent: :destroy
+  has_many :access_logs, dependent: :destroy
 
   # Validations
   validates :email, presence: true, uniqueness: true
   validates :username, presence: true, uniqueness: true
-  validates :role, inclusion: { in: roles.keys } # Allow all defined roles
+  validates :role, inclusion: { in: roles.keys }
 
-  # Permission Methods
+  # Status toggle method for easy testing
+  def toggle_active_status
+    update(active: !active)
+  end
+
+  # Permission methods
   def can_create_items?
     admin? || logistics_manager?
   end
