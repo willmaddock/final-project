@@ -8,12 +8,64 @@ require 'open-uri'
 # AccessPoint.destroy_all
 # ElevatedAccessRequest.destroy_all
 
+# Define lists for access-related bios and request reasons
+access_related_bios = [
+  "Experienced in managing secure clearance zones.",
+  "Skilled in overseeing restricted access areas.",
+  "Specialist in access management and clearance protocols.",
+  "Ensures safe and authorized access for all personnel.",
+  "Manages access points to maintain security standards.",
+  "Trained in securing high-clearance locations.",
+  "Coordinates clearance levels for secure facility zones.",
+  "Experienced in logistics and clearance procedures.",
+  "Supports safe access to restricted areas.",
+  "Responsible for managing security clearance protocols.",
+  "Expert in logistics clearance and facility security.",
+  "Authorized to oversee restricted access points."
+]
+
+access_request_reasons = [
+  "Request access to secure delivery area",
+  "Clearance needed for scheduled delivery",
+  "Authorization required for restricted access",
+  "Request permission to access loading dock",
+  "Urgent access required for high-priority delivery",
+  "Temporary clearance request for off-hours access",
+  "Access requested to restricted floor for delivery",
+  "Immediate access needed to assist with logistics",
+  "Clearance request for new restricted area",
+  "Scheduled maintenance access clearance request"
+]
+
+access_point_descriptions = [
+  "Main entrance with restricted access",
+  "Loading dock area for authorized personnel",
+  "Secure floor with limited access clearance",
+  "Warehouse storage area with restricted entry",
+  "Administrative office floor for internal use only",
+  "Data center floor with high security protocols",
+  "Mechanical room with restricted access",
+  "Server room access limited to IT staff only",
+  "Research lab requiring special clearance",
+  "High-security vault for sensitive materials",
+  "Access point to executive offices with limited clearance",
+  "Private garage for authorized vehicles",
+  "Elevator with restricted floor access",
+  "Archive room for classified documents",
+  "Medical storage area for authorized personnel",
+  "Security room monitoring restricted access points",
+  "Conference room with limited guest access",
+  "Staff-only entrance to secure facility zone",
+  "Equipment storage with limited personnel access",
+  "Restricted roof access for maintenance only"
+]
+
 # Create 10 access points
 10.times do
   AccessPoint.create!(
     location: Faker::Address.full_address,
     access_level: rand(1..5),
-    description: Faker::Lorem.sentence,
+    description: access_point_descriptions.sample,
     status: [true, false].sample
   )
 end
@@ -45,7 +97,7 @@ logistics_manager_user = User.create!(
 [admin_user, logistics_manager_user].each do |user|
   profile = Profile.new(
     user: user,
-    bio: Faker::Lorem.sentence,
+    bio: access_related_bios.sample,
     location: Faker::Address.city
   )
 
@@ -71,14 +123,14 @@ end
     email: Faker::Internet.email,
     password: password,
     password_confirmation: password,
-    role: %w[editor viewer shipping_agent].sample,
+    role: %w[admin editor viewer shipping_agent logistics_manager].sample,
     access_level: rand(1..5),
     status: [true, false].sample
   )
 
   profile = Profile.new(
     user: user,
-    bio: Faker::Lorem.sentence,
+    bio: access_related_bios.sample,  # Select a random bio from the list
     location: Faker::Address.city
   )
 
@@ -107,7 +159,7 @@ end
       ElevatedAccessRequest.create!(
         user: user,
         access_point_id: rand(1..10),
-        reason: Faker::Lorem.sentence,
+        reason: access_request_reasons.sample,  # Select a random reason from the list
         status: %w[pending approved denied].sample
       )
     end

@@ -1,21 +1,29 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  username: MyString
-  password_hash: MyString
-  full_name: MyString
-  email: MyString
-  role: MyString
+  username: john_doe
+  full_name: John Doe
+  email: john.doe@example.com
+  role: admin
   access_level: 1
   last_login: 2024-11-01 00:46:48
-  status: false
+  status: true
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
 
 two:
-  username: MyString
-  password_hash: MyString
-  full_name: MyString
-  email: MyString
-  role: MyString
-  access_level: 1
+  username: jane_smith
+  full_name: Jane Smith
+  email: jane.smith@example.com
+  role: editor
+  access_level: 2
   last_login: 2024-11-01 00:46:48
-  status: false
+  status: true
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
+
+shipping_agent:
+  username: shipping_agent_user
+  full_name: Agent Smith
+  email: agent.smith@example.com
+  role: shipping_agent
+  access_level: 3
+  last_login: 2024-11-01 00:46:48
+  status: true
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
