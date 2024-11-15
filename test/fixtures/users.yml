@@ -12,7 +12,7 @@ two:
   username: jane_smith
   full_name: Jane Smith
   email: jane.smith@example.com
-  role: editor
+  role: logistics_manager
   access_level: 2
   last_login: 2024-11-01 00:46:48
   status: true
