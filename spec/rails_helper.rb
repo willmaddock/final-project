@@ -1,4 +1,5 @@
-# This file is copied to spec/ when you run 'rails generate rspec:install'
+# spec/rails_helper.rb
+
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
@@ -11,6 +12,7 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'rspec/rails'
 
 # Add additional requires below this line. Rails is not loaded until this point!
+require 'devise'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -36,6 +38,16 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 
 RSpec.configure do |config|
+  # Include Devise helpers for sign_in and sign_out in system tests
+  config.include Devise::Test::IntegrationHelpers, type: :system
+  # Include Devise helpers for sign_in and sign_out in controller tests
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  # Include Devise helpers for request specs
+  config.include Devise::Test::IntegrationHelpers, type: :request
+
+  # Include FactoryBot syntax methods (like `create` and `build`) in tests
+  config.include FactoryBot::Syntax::Methods
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [
     Rails.root.join('spec/fixtures')
