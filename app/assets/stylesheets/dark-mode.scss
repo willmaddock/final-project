@@ -1,0 +1,122 @@
+// app/assets/stylesheets/dark-mode.scss
+
+// Backgrounds
+$dark-bg: #121212;
+$dark-card-bg: #1e1e1e;
+$dark-soft-bg: #2e2e2e;
+$dark-soft-bg-lighter: #3a3a3a; // Precomputed lighter border color
+
+// Text Colors
+$dark-text-color: #ffffff; // Ensured bright color for visibility
+$dark-muted-text: #b3b3b3;
+
+// Button Colors
+$dark-primary: #bb86fc;
+$dark-primary-hover: #9856fc;
+$dark-secondary: #03dac6;
+$dark-secondary-hover: #01b9a7;
+
+// Base Styles for Dark Mode
+.dark-mode {
+  background-color: $dark-bg;
+  color: $dark-text-color;
+
+  // Apply styles to body
+  body {
+    background-color: $dark-bg;
+    color: $dark-text-color;
+  }
+
+  // Cards, headers, modals, and footers
+  .card, header, .modal, footer {
+    background-color: $dark-card-bg;
+    color: $dark-text-color;
+  }
+
+  // Common text elements
+  h1, h2, h3, h4, h5, h6, p, li, dt, dd, span, strong, em {
+    color: $dark-text-color; // Ensure all text elements are visible
+  }
+
+  // Labels
+  label {
+    color: $dark-text-color; // Ensure labels are visible
+  }
+
+  // Inputs and dropdowns
+  .form-control, select.form-control, input, textarea {
+    background-color: $dark-soft-bg;
+    color: $dark-text-color;
+    border-color: $dark-soft-bg-lighter;
+  }
+
+  // Dropdown options
+  select.form-control option {
+    color: $dark-text-color;
+    background-color: $dark-soft-bg;
+  }
+
+  // Buttons
+  .btn-primary {
+    background-color: $dark-primary;
+    color: $dark-text-color;
+
+    &:hover {
+      background-color: $dark-primary-hover;
+    }
+  }
+
+  .btn-secondary {
+    background-color: $dark-secondary;
+
+    &:hover {
+      background-color: $dark-secondary-hover;
+    }
+  }
+
+  .nav-link {
+    color: $dark-text-color;
+
+    &:hover {
+      background-color: $dark-primary;
+    }
+  }
+
+  // Links
+  a {
+    color: $dark-text-color;
+
+    &:hover {
+      text-decoration: underline; // Add hover effect for visibility
+    }
+  }
+
+  // Additional styles for muted text
+  .muted-text {
+    color: $dark-muted-text; // For any text that should be less prominent but still visible
+  }
+
+  // Specific styles for containers and sections
+  .container, .row, .col {
+    background-color: $dark-card-bg; // For grid elements
+  }
+
+  // Ensure footer and header have specific styling
+  .footer, .header {
+    background-color: $dark-card-bg;
+    color: $dark-text-color;
+  }
+
+  // Adjust specific components that may have distinct styling needs
+  .specific-component {
+    background-color: $dark-card-bg;
+    color: $dark-text-color;
+
+    a {
+      color: $dark-primary;
+      &:hover {
+        color: $dark-secondary;
+      }
+    }
+  }
+}

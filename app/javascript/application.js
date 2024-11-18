@@ -8,6 +8,9 @@ import "@hotwired/stimulus-loading";
 // Import Bootstrap JavaScript
 import "bootstrap";  // Ensure Bootstrap is imported here
 
+// Import Dark Mode Toggle Script
+import "./dark_mode_toggle";
+
 // Ensure compatibility with Turbo for DELETE requests in links
 document.addEventListener("turbo:load", () => {
     // Any additional JavaScript code can go here

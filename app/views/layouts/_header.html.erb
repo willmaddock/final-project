@@ -5,38 +5,44 @@
         <%= image_tag 'logo.png', alt: 'Logo', width: 100, height: 50, class: 'me-3' %>
         <h1 class="h4 text-dark mb-0">AccessClearance Hub</h1>
       </div>
-      <div class="dropdown">
-        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Account
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <% if user_signed_in? %>
-            <% if current_user.role == 'shipping_agent' || current_user.role == 'logistics_manager' %>
+      <div class="d-flex align-items-center">
+        <!-- Dark Mode Toggle -->
+        <button id="dark-mode-toggle" class="btn btn-secondary me-3">Toggle Dark Mode</button>
+
+        <!-- Account Dropdown -->
+        <div class="dropdown">
+          <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Account
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <% if user_signed_in? %>
+              <% if current_user.role == 'shipping_agent' || current_user.role == 'logistics_manager' %>
+                <li>
+                  <%= link_to 'Request Elevated Access', new_elevated_access_request_path, class: 'dropdown-item' %>
+                </li>
+              <% end %>
               <li>
-                <%= link_to 'Request Elevated Access', new_elevated_access_request_path, class: 'dropdown-item' %>
+                <%= link_to 'Logout', destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: 'dropdown-item', aria: { label: 'Logout' } %>
               </li>
-            <% end %>
-            <li>
-              <%= link_to 'Logout', destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: 'dropdown-item', aria: { label: 'Logout' } %>
-            </li>
-            <% if current_user.profile.nil? %>
-              <li>
-                <%= link_to 'Create Profile', new_profile_path, class: 'dropdown-item' %>
-              </li>
+              <% if current_user.profile.nil? %>
+                <li>
+                  <%= link_to 'Create Profile', new_profile_path, class: 'dropdown-item' %>
+                </li>
+              <% else %>
+                <li>
+                  <%= link_to 'My Profile', profile_path(current_user.profile), class: 'dropdown-item' %>
+                </li>
+              <% end %>
             <% else %>
               <li>
-                <%= link_to 'My Profile', profile_path(current_user.profile), class: 'dropdown-item' %>
+                <%= link_to 'Sign In', new_user_session_path, class: 'dropdown-item' %>
+              </li>
+              <li>
+                <%= link_to 'Sign Up', new_user_registration_path, class: 'dropdown-item' %>
               </li>
             <% end %>
-          <% else %>
-            <li>
-              <%= link_to 'Sign In', new_user_session_path, class: 'dropdown-item' %>
-            </li>
-            <li>
-              <%= link_to 'Sign Up', new_user_registration_path, class: 'dropdown-item' %>
-            </li>
-          <% end %>
-        </ul>
+          </ul>
+        </div>
       </div>
     </div>
 
