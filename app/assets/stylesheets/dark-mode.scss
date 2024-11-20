@@ -4,7 +4,6 @@
 $dark-bg: #121212;
 $dark-card-bg: #1e1e1e;
 $dark-soft-bg: #2e2e2e;
-$dark-soft-bg-lighter: #3a3a3a; // Precomputed lighter border color
 
 // Text Colors
 $dark-text-color: #ffffff; // Ensured bright color for visibility
@@ -38,22 +37,11 @@ $dark-secondary-hover: #01b9a7;
     color: $dark-text-color; // Ensure all text elements are visible
   }
 
-  // Labels
-  label {
-    color: $dark-text-color; // Ensure labels are visible
-  }
-
-  // Inputs and dropdowns
-  .form-control, select.form-control, input, textarea {
+  // Inputs and links
+  .form-control, .nav-link, .dropdown-item, input, textarea {
     background-color: $dark-soft-bg;
     color: $dark-text-color;
-    border-color: $dark-soft-bg-lighter;
-  }
-
-  // Dropdown options
-  select.form-control option {
-    color: $dark-text-color;
-    background-color: $dark-soft-bg;
+    border-color: lighten($dark-soft-bg, 10%); // Adjust border color for inputs
   }
 
   // Buttons

@@ -1,27 +1,34 @@
-require 'test_helper'
+require 'rails_helper'
 
-class ElevatedAccessRequestTest < ActiveSupport::TestCase
-  setup do
-    @shipping_agent = users(:shipping_agent)
-    @access_point = access_points(:one)
-    @elevated_access_request = ElevatedAccessRequest.new(
-      user: @shipping_agent,
-      access_point: @access_point,
+RSpec.describe ElevatedAccessRequest, type: :model do
+  let(:shipping_agent) { create(:user, :shipping_agent) }
+  let(:access_point) { create(:access_point) }
+  let(:elevated_access_request) do
+    build(
+      :elevated_access_request,
+      user: shipping_agent,
+      access_point: access_point,
       reason: "Need to deliver to restricted elevator floor."
     )
   end
 
-  test "should be valid with valid attributes" do
-    assert @elevated_access_request.valid?
+  context "with valid attributes" do
+    it "is valid" do
+      expect(elevated_access_request).to be_valid
+    end
   end
 
-  test "should not be valid without a user" do
-    @elevated_access_request.user = nil
-    assert_not @elevated_access_request.valid?
+  context "without a user" do
+    it "is not valid" do
+      elevated_access_request.user = nil
+      expect(elevated_access_request).not_to be_valid
+    end
   end
 
-  test "should not be valid without an access point" do
-    @elevated_access_request.access_point = nil
-    assert_not @elevated_access_request.valid?
+  context "without an access point" do
+    it "is not valid" do
+      elevated_access_request.access_point = nil
+      expect(elevated_access_request).not_to be_valid
+    end
   end
 end
