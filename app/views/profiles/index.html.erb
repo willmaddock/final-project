@@ -1,22 +1,18 @@
-<p style="color: var(--text-primary);"><%= notice %></p>
+<p style="color: green"><%= notice %></p>
 
-<h1 style="color: var(--text-primary);">Profiles</h1>
+<h1>Profiles</h1>
 
 <% if flash[:alert] %>
-  <div class="alert alert-danger" style="background-color: var(--alert-danger-bg); color: var(--text-primary);">
-    <%= flash[:alert] %>
-  </div>
+  <div class="alert alert-danger"><%= flash[:alert] %></div>
 <% end %>
 
 <% if flash[:notice] %>
-  <div class="alert alert-success" style="background-color: var(--alert-success-bg); color: var(--text-primary);">
-    <%= flash[:notice] %>
-  </div>
+  <div class="alert alert-success"><%= flash[:notice] %></div>
 <% end %>
 
 <%= link_to 'New Profile', new_profile_path, class: 'btn btn-primary mb-3' %>
 
-<%# Role-specific messages for profiles %>
+<%# Define role-specific messages for profiles %>
 <% role_benefits = {
   "shipping_agent" => "Manage profile details and associated items efficiently.",
   "viewer" => "View profiles and associated data with read-only access.",
@@ -25,8 +21,9 @@
   "editor" => "Edit profile details as needed."
 } %>
 
+<%# Display the message for the current user’s role %>
 <% if user_signed_in? && role_benefits.key?(current_user.role) %>
-  <div class="alert alert-info" style="background-color: var(--alert-info-bg); color: var(--alert-info-text);">
+  <div class="alert alert-info">
     <%= role_benefits[current_user.role] %>
   </div>
 <% end %>
@@ -35,22 +32,22 @@
 <%= form_with(url: profiles_path, method: :get, local: true) do |form| %>
   <div class="d-flex align-items-center mb-3">
     <div class="me-3">
-      <%= form.label :username, "Username:", class: "form-label", style: "color: var(--text-primary);" %>
+      <%= form.label :username, "Username:", class: "form-label" %>
       <%= form.select :username, User.pluck(:username).uniq, { include_blank: 'Select Username' },
                       { class: 'form-control', onchange: 'this.form.submit();' } %>
     </div>
     <div class="me-3">
-      <%= form.label :location, "Location:", class: "form-label", style: "color: var(--text-primary);" %>
+      <%= form.label :location, "Location:", class: "form-label" %>
       <%= form.select :location, Profile.pluck(:location).uniq, { include_blank: 'Select Location' },
                       { class: 'form-control', onchange: 'this.form.submit();' } %>
     </div>
     <div class="me-3">
-      <%= form.label :email, "Email:", class: "form-label", style: "color: var(--text-primary);" %>
+      <%= form.label :email, "Email:", class: "form-label" %>
       <%= form.select :email, User.pluck(:email).uniq, { include_blank: 'Select Email' },
                       { class: 'form-control', onchange: 'this.form.submit();' } %>
     </div>
     <div>
-      <%= form.label :per_page, "Profiles per page:", class: "form-label", style: "color: var(--text-primary);" %>
+      <%= form.label :per_page, "Profiles per page:", class: "form-label" %>
       <%= form.select :per_page, [12, 24, 36, 48], { selected: params[:per_page] || 12 },
                       { class: "form-control", onchange: 'this.form.submit();' } %>
       <%= hidden_field_tag :page, params[:page] %>
@@ -60,14 +57,14 @@
 
 <!-- Profile Cards -->
 <% if @profiles.empty? %>
-  <div class="alert alert-warning" role="alert" style="background-color: var(--background-secondary); color: var(--text-secondary);">
+  <div class="alert alert-warning" role="alert">
     No profiles found matching your criteria.
   </div>
 <% else %>
   <div id="profiles" class="d-flex flex-wrap">
     <% @profiles.each do |profile| %>
-      <div class="profile card m-2" style="width: 18rem; background-color: var(--background-primary); color: var(--text-primary);">
-        <%= render profile %>
+      <div class="profile card m-2" style="width: 18rem;">
+        <%= render profile %> <!-- Assuming the profile partial renders relevant details -->
         <div class="card-body">
           <p><%= link_to "Show this profile", profile, class: "btn btn-info" %></p>
         </div>
@@ -77,12 +74,12 @@
 <% end %>
 
 <!-- Pagination Controls -->
-<div class="pagination mt-4 d-flex justify-content-between align-items-center">
+<div class="pagination mt-4">
   <% if @profiles.prev_page %>
     <%= link_to 'Previous', profiles_path(page: @profiles.prev_page, per_page: params[:per_page]), class: 'btn btn-secondary' %>
   <% end %>
 
-  <span style="color: var(--text-primary);">Page <%= @profiles.current_page %> of <%= @profiles.total_pages %></span>
+  <span>Page <%= @profiles.current_page %> of <%= @profiles.total_pages %></span>
 
   <% if @profiles.next_page %>
     <%= link_to 'Next', profiles_path(page: @profiles.next_page, per_page: params[:per_page]), class: 'btn btn-secondary' %>
