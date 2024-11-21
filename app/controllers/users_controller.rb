@@ -1,19 +1,17 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[show edit update destroy]
-  before_action :authorize_user!, only: %i[edit update destroy create new]  # Authorization check for new, editing, creating, and deleting
+  before_action :authorize_user!, only: %i[edit update destroy create new]
 
   # GET /users or /users.json
   def index
-    per_page = (params[:per_page].presence || 10).to_i  # Convert to integer and use default if not present
+    per_page = (params[:per_page].presence || 10).to_i
     @users = User.all
 
-    # Apply filters based on the selected dropdown values
     @users = @users.where("username LIKE ?", "%#{params[:username]}%") if params[:username].present?
     @users = @users.where("full_name LIKE ?", "%#{params[:full_name]}%") if params[:full_name].present?
     @users = @users.where("email LIKE ?", "%#{params[:email]}%") if params[:email].present?
     @users = @users.where(role: params[:role]) if params[:role].present? && params[:role] != ''
 
-    # Handle the status filter
     if params[:status].present?
       case params[:status]
       when 'active'
@@ -26,7 +24,7 @@ class UsersController < ApplicationController
     @users = @users.page(params[:page]).per(per_page)
   rescue StandardError => e
     flash.now[:alert] = "Failed to load users: #{e.message}"
-    @users = []  # Fallback to an empty array to prevent errors in the view
+    @users = []
   end
 
   # GET /users/1 or /users/1.json
@@ -45,8 +43,6 @@ class UsersController < ApplicationController
   # POST /users or /users.json
   def create
     @user = User.new(user_params)
-
-    # Set default password if not provided
     @user.password = "password" if @user.password.blank?
 
     respond_to do |format|
@@ -63,11 +59,10 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1 or /users/1.json
   def update
-    # Update the password only if a new password is provided
     @user.password = params[:user][:password] if params[:user][:password].present?
 
     respond_to do |format|
-      if @user.update(user_params.except(:password)) # Exclude password unless explicitly provided
+      if @user.update(user_params.except(:password))
         flash[:notice] = "User was successfully updated."
         format.html { redirect_to @user }
         format.json { render :show, status: :ok, location: @user }
@@ -80,11 +75,30 @@ class UsersController < ApplicationController
 
   # DELETE /users/1 or /users/1.json
   def destroy
-    @user.destroy!
+    begin
+      ActiveRecord::Base.transaction do
+        @user.profile&.destroy # Destroy the associated profile if it exists
+        @user.access_logs.destroy_all # Destroy all associated access logs
+        @user.destroy! # Attempt to delete the user
+      end
 
-    respond_to do |format|
-      format.html { redirect_to users_path, status: :see_other, notice: "User was successfully deleted." }
-      format.json { head :no_content }
+      respond_to do |format|
+        format.html { redirect_to users_path, status: :see_other, notice: "User was successfully deleted." }
+        format.json { head :no_content }
+      end
+    rescue ActiveRecord::InvalidForeignKey
+      respond_to do |format|
+        format.html do
+          redirect_to users_path,
+                      alert: "Cannot delete this user because they have related records in the system, such as access logs or other dependencies. Please remove these records first or contact support for assistance."
+        end
+        format.json { render json: { error: "User has associated records and cannot be deleted." }, status: :unprocessable_entity }
+      end
+    rescue ActiveRecord::RecordNotDestroyed => e
+      respond_to do |format|
+        format.html { redirect_to users_path, alert: "An error occurred: #{e.message}" }
+        format.json { render json: { error: e.message }, status: :unprocessable_entity }
+      end
     end
   end
 
