@@ -18,7 +18,9 @@ RSpec.describe User, type: :model do
 
   # Test 2: Uniqueness of Fields
   describe 'Uniqueness' do
-    before { create(:user, username: 'uniqueuser', email: 'unique@example.com') }
+    before do
+      create(:user, username: 'uniqueuser', email: 'unique@example.com')
+    end
 
     it 'is invalid with a duplicate username' do
       user = build(:user, username: 'uniqueuser', email: 'newemail@example.com')
@@ -36,18 +38,18 @@ RSpec.describe User, type: :model do
   # Test 3: Role-Based Authorization
   describe 'Role-based Authorization' do
     it 'grants admin the ability to create items' do
-      admin = build(:user, :admin)
-      expect(admin.can_create_items?).to be true
+      admin = create(:user, :admin)
+      expect(admin.can_create_items?).to eq(true)
     end
 
     it 'prevents shipping agent from creating items' do
-      shipping_agent = build(:user, :shipping_agent)
-      expect(shipping_agent.can_create_items?).to be false
+      shipping_agent = create(:user, :shipping_agent)
+      expect(shipping_agent.can_create_items?).to eq(false)
     end
 
     it 'grants logistics manager permission to audit logs' do
-      logistics_manager = build(:user, :logistics_manager)
-      expect(logistics_manager.can_audit_logs?).to be true
+      logistics_manager = create(:user, :logistics_manager)
+      expect(logistics_manager.can_audit_logs?).to eq(true)
     end
   end
 
@@ -56,16 +58,18 @@ RSpec.describe User, type: :model do
     it 'toggles user status between active and inactive' do
       user = create(:user, status: true)
 
-      # Initial status should be active
-      expect(user.status).to be true
+      aggregate_failures 'Testing status toggling' do
+        # Initial status should be active
+        expect(user.status).to eq(true)
 
-      # Toggle status
-      user.toggle!(:status)
-      expect(user.status).to be false
+        # Toggle status to inactive
+        user.toggle!(:status)
+        expect(user.status).to eq(false)
 
-      # Toggle back to active
-      user.toggle!(:status)
-      expect(user.status).to be true
+        # Toggle back to active
+        user.toggle!(:status)
+        expect(user.status).to eq(true)
+      end
     end
   end
 end
