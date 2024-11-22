@@ -1,3 +1,5 @@
+// app/assets/stylesheets/dark-mode.scss
+
 @import 'variables'; // Import shared variables
 
 .dark-mode {
@@ -28,11 +30,6 @@
     border-color: lighten($dark-soft-bg, 10%);
   }
 
-  // Labels - ensure form labels are visible
-  .form-label {
-    color: $dark-text-color;
-  }
-
   // Buttons
   .btn-primary {
     background-color: $dark-primary;
@@ -52,19 +49,18 @@
     }
   }
 
-  // Navigation links (updated for better visibility in dark mode)
   .nav-link {
-    color: #f1f1f1 !important; /* Light text for better visibility */
+    color: $dark-text-color;
 
     &:hover {
       background-color: $dark-primary;
-      color: #fff; /* Light text on hover */
     }
   }
 
   // Links
   a {
-    color: #f1f1f1 !important; /* Ensure links are light in dark mode */
+    color: $dark-text-color;
+
     &:hover {
       text-decoration: underline;
     }
@@ -86,47 +82,17 @@
     color: $dark-text-color;
   }
 
-  // Table Text Color for Dark Mode
-  .table th, .table td {
-    color: #f1f1f1 !important; /* Light text for readability in dark mode */
-  }
+  // Adjust specific components that may have distinct styling needs
+  .specific-component {
+    background-color: $dark-card-bg;
+    color: $dark-text-color;
 
-  .table-striped tbody tr:nth-of-type(odd) {
-    background-color: #333; /* Darker background for odd rows */
-  }
+    a {
+      color: $dark-primary;
 
-  .table-striped tbody tr:nth-of-type(even) {
-    background-color: #444; /* Slightly lighter for even rows */
-  }
-
-  .table th {
-    background-color: #222; /* Dark background for the table header */
-  }
-
-  .table td {
-    background-color: #333; /* Dark background for the table cells */
-  }
-
-  .alert-info, .alert-success, .alert-warning, .alert-danger {
-    color: #fff; /* Light text for alerts in dark mode */
-    background-color: #555; /* Darker background for alerts */
-  }
-
-  .form-select {
-    background-color: #444; /* Dark background for form selects */
-    color: #f1f1f1; /* Light text for form selects */
-  }
-
-  .form-label {
-    color: #f1f1f1; /* Light text for labels */
-  }
-
-  .btn {
-    color: #fff; /* Light text on buttons */
-    background-color: #007bff; /* Primary button color */
-  }
-
-  .btn:hover {
-    background-color: #0056b3; /* Darker button on hover */
+      &:hover {
+        color: $dark-secondary;
+      }
+    }
   }
 }

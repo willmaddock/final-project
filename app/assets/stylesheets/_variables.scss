@@ -1,0 +1,42 @@
+// Colors for Light Mode
+$light-bg: #ffffff;
+$light-card-bg: #f8f9fa;
+$light-soft-bg: #f1f1f1;
+$light-text-color: #000000;
+$light-muted-text: #6c757d;
+
+// Colors for Dark Mode
+$dark-bg: #121212;
+$dark-card-bg: #1e1e1e;
+$dark-soft-bg: #2e2e2e;
+$dark-text-color: #ffffff;
+$dark-muted-text: #b3b3b3;
+
+// Primary and Secondary Colors
+$primary-color: #007bff; // Shared primary color for both themes
+$primary-hover: darken($primary-color, 10%);
+$secondary-color: #6c757d;
+$secondary-hover: lighten($secondary-color, 10%);
+
+// Dark Mode Specific
+$dark-primary: #bb86fc;
+$dark-primary-hover: #9856fc;
+$dark-secondary: #03dac6;
+$dark-secondary-hover: #01b9a7;
+
+// Typography
+$font-family-base: "Arial", sans-serif;
+$font-size-base: 16px;
+$font-size-small: 14px;
+$font-size-large: 18px;
+
+// Borders
+$border-radius: 4px;
+$border-color-light: #dcdcdc;
+$border-color-dark: lighten($dark-soft-bg, 10%);
+
+// Spacing
+$spacing-unit: 8px; // Base spacing unit
+$spacing-small: $spacing-unit * 0.5;
+$spacing-medium: $spacing-unit * 2;
+$spacing-large: $spacing-unit * 4;
