@@ -1,5 +1,27 @@
 @import 'variables'; // Import shared variables
 
+// Button styles for both modes
+.btn-light {
+  background-color: $light-bg;
+  color: $dark-text-color;
+
+  &:hover {
+    background-color: lighten($light-bg, 10%);
+    color: $dark-text-color;
+  }
+}
+
+// Adjust .btn-light for dark mode
+.dark-mode .btn-light {
+  background-color: $dark-soft-bg; // Adjusted for dark mode
+  color: #f1f1f1;
+
+  &:hover {
+    background-color: lighten($dark-soft-bg, 10%);
+    color: #fff; // Ensure visibility on hover
+  }
+}
+
 .dark-mode {
   background-color: $dark-bg;
   color: $dark-text-color;
@@ -33,38 +55,19 @@
     color: $dark-text-color;
   }
 
-  // Buttons
-  .btn-primary {
-    background-color: $dark-primary;
-    color: $dark-text-color;
-
-    &:hover {
-      background-color: $dark-primary-hover;
-    }
-  }
-
-  .btn-secondary {
-    background-color: $dark-secondary;
-    color: $dark-text-color;
-
-    &:hover {
-      background-color: $dark-secondary-hover;
-    }
-  }
-
   // Navigation links (updated for better visibility in dark mode)
   .nav-link {
-    color: #f1f1f1 !important; /* Light text for better visibility */
+    color: #f1f1f1 !important;
 
     &:hover {
       background-color: $dark-primary;
-      color: #fff; /* Light text on hover */
+      color: #fff;
     }
   }
 
   // Links
   a {
-    color: #f1f1f1 !important; /* Ensure links are light in dark mode */
+    color: #f1f1f1 !important;
     &:hover {
       text-decoration: underline;
     }
@@ -88,45 +91,78 @@
 
   // Table Text Color for Dark Mode
   .table th, .table td {
-    color: #f1f1f1 !important; /* Light text for readability in dark mode */
+    color: #f1f1f1 !important;
   }
 
   .table-striped tbody tr:nth-of-type(odd) {
-    background-color: #333; /* Darker background for odd rows */
+    background-color: #333;
   }
 
   .table-striped tbody tr:nth-of-type(even) {
-    background-color: #444; /* Slightly lighter for even rows */
+    background-color: #444;
   }
 
   .table th {
-    background-color: #222; /* Dark background for the table header */
+    background-color: #222;
   }
 
   .table td {
-    background-color: #333; /* Dark background for the table cells */
+    background-color: #333;
   }
 
   .alert-info, .alert-success, .alert-warning, .alert-danger {
-    color: #fff; /* Light text for alerts in dark mode */
-    background-color: #555; /* Darker background for alerts */
+    color: #fff;
+    background-color: #555;
   }
 
   .form-select {
-    background-color: #444; /* Dark background for form selects */
-    color: #f1f1f1; /* Light text for form selects */
+    background-color: #444;
+    color: #f1f1f1;
   }
 
-  .form-label {
-    color: #f1f1f1; /* Light text for labels */
+  // Buttons
+  .btn-show {
+    background-color: #041d37; // Blue
+    color: #fff;
+
+    &:hover {
+      background-color: lighten(#062240, 10%);
+    }
   }
 
-  .btn {
-    color: #fff; /* Light text on buttons */
-    background-color: #007bff; /* Primary button color */
+  .btn-edit {
+    background-color: #71590f; // Yellow
+    color: #000;
+
+    &:hover {
+      background-color: darken(#574208, 10%);
+    }
   }
 
-  .btn:hover {
-    background-color: #0056b3; /* Darker button on hover */
+  .btn-delete {
+    background-color: #dc3545; // Red
+    color: #fff;
+
+    &:hover {
+      background-color: darken(#dc3545, 10%);
+    }
+  }
+
+  .btn-approve {
+    background-color: #28a745; // Green
+    color: #fff;
+
+    &:hover {
+      background-color: darken(#28a745, 10%);
+    }
+  }
+
+  .btn-deny {
+    background-color: #dc3545; // Red (same as delete)
+    color: #fff;
+
+    &:hover {
+      background-color: darken(#dc3545, 10%);
+    }
   }
 }
