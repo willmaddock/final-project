@@ -3,8 +3,16 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  enum role: { admin: 0, editor: 1, viewer: 2, shipping_agent: 3, logistics_manager: 4 }
+  # Roles for authorization
+  enum role: {
+    admin: 0,
+    editor: 1,
+    viewer: 2,
+    shipping_agent: 3,
+    logistics_manager: 4
+  }
 
+  # Default role assignment
   after_initialize do
     self.role ||= :viewer if new_record? && role.nil?
   end
@@ -12,13 +20,17 @@ class User < ApplicationRecord
   # Relationships
   has_one :profile, dependent: :destroy
   has_many :access_logs, dependent: :destroy
+  has_many :comments, dependent: :destroy  # User's comments
+
+  # Voting support
+  acts_as_voter  # Enables the user to vote on votable models
 
   # Validations
   validates :email, presence: true, uniqueness: true
   validates :username, presence: true, uniqueness: true
   validates :role, inclusion: { in: roles.keys }
 
-  # Status toggle method for easy testing
+  # Status toggle method
   def toggle_active_status
     update(active: !active)
   end

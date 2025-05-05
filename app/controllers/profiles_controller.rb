@@ -1,14 +1,13 @@
 class ProfilesController < ApplicationController
   before_action :set_profile, only: %i[show edit update destroy]
   before_action :authorize_profile!, only: %i[edit update destroy]
-  before_action :redirect_if_profile_exists, only: %i[new create]  # Ensure no duplicate profiles
+  before_action :redirect_if_profile_exists, only: %i[new create]
 
-  # GET /profiles or /profiles.json
+  # GET /profiles
   def index
     per_page = (params[:per_page].presence || 12).to_i
     @profiles = Profile.page(params[:page]).per(per_page)
 
-    # Apply filters if provided
     @profiles = @profiles.joins(:user).where('users.username = ?', params[:username]) if params[:username].present?
     @profiles = @profiles.where(location: params[:location]) if params[:location].present?
     @profiles = @profiles.joins(:user).where('users.email = ?', params[:email]) if params[:email].present?
@@ -20,8 +19,10 @@ class ProfilesController < ApplicationController
     render 'index'
   end
 
-  # GET /profiles/1 or /profiles/1.json
+  # GET /profiles/1
   def show
+    @comment = Comment.new
+    @comments = @profile.comments.includes(:user).order(created_at: :desc)
   end
 
   # GET /profiles/new
@@ -36,7 +37,7 @@ class ProfilesController < ApplicationController
     @users = User.where(id: @profile.user_id)
   end
 
-  # POST /profiles or /profiles.json
+  # POST /profiles
   def create
     @profile = Profile.new(profile_params)
     @profile.user_id = current_user.id
@@ -50,16 +51,15 @@ class ProfilesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /profiles/1 or /profiles/1.json
+  # PATCH/PUT /profiles/1
   def update
     @users = User.where(id: @profile.user_id)
     handle_response(@profile.update(profile_params), :edit, "Profile was successfully updated.")
   end
 
-  # DELETE /profiles/1 or /profiles/1.json
+  # DELETE /profiles/1
   def destroy
     @profile.destroy
-
     respond_to do |format|
       format.html { redirect_to profiles_path, status: :see_other, notice: "Profile was successfully deleted." }
       format.json { head :no_content }
@@ -73,9 +73,7 @@ class ProfilesController < ApplicationController
   end
 
   def authorize_profile!
-    if current_user.admin? || current_user.logistics_manager? || @profile.user == current_user
-      true
-    else
+    unless current_user.admin? || current_user.logistics_manager? || @profile.user == current_user
       redirect_to root_path, alert: "You do not have permission to perform this action."
     end
   end

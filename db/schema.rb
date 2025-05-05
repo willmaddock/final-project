@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_10_224613) do
+ActiveRecord::Schema[7.1].define(version: 2025_05_05_075022) do
   create_table "access_logs", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "access_point_id", null: false
@@ -64,6 +64,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_10_224613) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "comments", force: :cascade do |t|
+    t.text "body"
+    t.integer "user_id", null: false
+    t.integer "profile_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["profile_id"], name: "index_comments_on_profile_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
   create_table "elevated_access_requests", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "access_point_id", null: false
@@ -106,10 +116,28 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_10_224613) do
     t.index ["username"], name: "index_users_on_username"
   end
 
+  create_table "votes", force: :cascade do |t|
+    t.string "votable_type"
+    t.integer "votable_id"
+    t.string "voter_type"
+    t.integer "voter_id"
+    t.boolean "vote_flag"
+    t.string "vote_scope"
+    t.integer "vote_weight"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["votable_id", "votable_type", "vote_scope"], name: "index_votes_on_votable_id_and_votable_type_and_vote_scope"
+    t.index ["votable_type", "votable_id"], name: "index_votes_on_votable"
+    t.index ["voter_id", "voter_type", "vote_scope"], name: "index_votes_on_voter_id_and_voter_type_and_vote_scope"
+    t.index ["voter_type", "voter_id"], name: "index_votes_on_voter"
+  end
+
   add_foreign_key "access_logs", "access_points"
   add_foreign_key "access_logs", "users"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "comments", "profiles"
+  add_foreign_key "comments", "users"
   add_foreign_key "elevated_access_requests", "access_points"
   add_foreign_key "elevated_access_requests", "users"
   add_foreign_key "profiles", "users"

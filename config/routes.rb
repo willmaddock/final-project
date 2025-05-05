@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  # Routes for elevated access requests with custom approve and deny actions
   resources :elevated_access_requests do
     member do
       post :approve
@@ -15,12 +16,22 @@ Rails.application.routes.draw do
   # Resources for the application
   resources :access_logs
   resources :access_points
-  resources :profiles
+
+  # Profiles and nested comments with upvote functionality
+  resources :profiles do
+    resources :comments, only: [:create, :destroy] do
+      member do
+        post :upvote
+      end
+    end
+  end
+
+  # Resources for users excluding the create route (handled by Devise and custom route)
   resources :users, except: :create  # Exclude the default create route for users
 
-  # Health check route
+  # Health check route for the application
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Define the root path route
-  root "users#index"  # Setting the home page to the users index action
+  # Define the root path route (default landing page)
+  root "users#index"
 end

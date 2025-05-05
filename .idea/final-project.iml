@@ -39,6 +39,7 @@
     <orderEntry type="library" scope="PROVIDED" name="activerecord (v7.1.5, RVM: ruby-3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="activestorage (v7.1.5, RVM: ruby-3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="activesupport (v7.1.5, RVM: ruby-3.2.5) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="acts_as_votable (v0.12.1, RVM: ruby-3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="addressable (v2.8.7, RVM: ruby-3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="autoprefixer-rails (v10.4.19.0, RVM: ruby-3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="base64 (v0.2.0, RVM: ruby-3.2.5) [gem]" level="application" />
