@@ -191,6 +191,8 @@ GEM
     nokogiri (1.16.7-arm64-darwin)
       racc (~> 1.4)
     orm_adapter (0.5.0)
+    pg (1.6.1-aarch64-linux)
+    pg (1.6.1-arm64-darwin)
     popper_js (2.11.8)
     psych (5.1.2)
       stringio
@@ -332,12 +334,13 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   kaminari
+  pg
   puma (>= 5.0)
   rails (~> 7.1.5)
   rspec-rails (~> 7.0)
   selenium-webdriver
   sprockets-rails
-  sqlite3 (>= 1.4)
+  sqlite3
   stimulus-rails
   turbo-rails
   tzinfo-data
