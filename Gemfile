@@ -82,6 +82,8 @@ group :test do
   gem 'factory_bot_rails'
 end
 
+gem 'mini_racer', platforms: :ruby
+
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
