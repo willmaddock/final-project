@@ -54,6 +54,7 @@
     <orderEntry type="library" scope="PROVIDED" name="concurrent-ruby (v1.3.4, mise: 3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="connection_pool (v2.4.1, mise: 3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="crass (v1.0.6, mise: 3.2.5) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="dartsass-sprockets (v3.2.1, mise: 3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="date (v3.4.0, mise: 3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="debug (v1.9.2, mise: 3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="devise (v4.9.4, mise: 3.2.5) [gem]" level="application" />
@@ -65,6 +66,7 @@
     <orderEntry type="library" scope="PROVIDED" name="faker (v3.4.2, mise: 3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="ffi (v1.17.0, mise: 3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="globalid (v1.2.1, mise: 3.2.5) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="google-protobuf (v4.31.1, mise: 3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="i18n (v1.14.6, mise: 3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="image_processing (v1.13.0, mise: 3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="importmap-rails (v2.0.3, mise: 3.2.5) [gem]" level="application" />
@@ -121,6 +123,8 @@
     <orderEntry type="library" scope="PROVIDED" name="rspec-support (v3.13.1, mise: 3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="ruby-vips (v2.2.2, mise: 3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rubyzip (v2.3.2, mise: 3.2.5) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="sass-embedded (v1.90.0, mise: 3.2.5) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="sassc-embedded (v1.80.5, mise: 3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="securerandom (v0.3.1, mise: 3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="selenium-webdriver (v4.26.0, mise: 3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="sprockets (v4.2.1, mise: 3.2.5) [gem]" level="application" />
@@ -129,6 +133,7 @@
     <orderEntry type="library" scope="PROVIDED" name="stimulus-rails (v1.3.4, mise: 3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="stringio (v3.1.2, mise: 3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="thor (v1.3.2, mise: 3.2.5) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="tilt (v2.6.1, mise: 3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="timeout (v0.4.2, mise: 3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="turbo-rails (v2.0.11, mise: 3.2.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="tzinfo (v2.0.6, mise: 3.2.5) [gem]" level="application" />
