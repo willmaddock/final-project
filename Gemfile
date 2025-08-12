@@ -45,7 +45,7 @@ gem "bootsnap", require: false
 gem "image_processing", "~> 1.2"
 
 # Add Bootstrap for styling
-gem 'bootstrap', '~> 5.1.3'
+gem 'bootstrap', '~> 5.3.3'
 
 # Add Devise for authentication
 gem 'devise'
@@ -83,6 +83,8 @@ group :test do
 end
 
 gem 'mini_racer', platforms: :ruby
+
+gem 'dartsass-sprockets'
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]

@@ -20,3 +20,16 @@
  *= require_tree .
  *= require_self
  */
+
+/* Override for deprecated color-adjust in print media */
+@media print {
+  * {
+    print-color-adjust: economy !important;
+  }
+  .bg-primary, .bg-secondary, .bg-success, .bg-info, .bg-warning, .bg-danger, .bg-light, .bg-dark {
+    print-color-adjust: exact !important;
+  }
+  .form-check-input:checked {
+    print-color-adjust: exact !important;
+  }
+}
