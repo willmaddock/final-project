@@ -61,7 +61,7 @@ group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
 
   # Add Faker for generating test data
-  group :development, :test, :production do
+  group :development, :test do
     gem 'faker'
   end
 

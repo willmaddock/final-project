@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  # 🔐 Temporary route for DB setup
-  get 'admin/run_setup', to: 'admin_tasks#run_setup'
-
   # Routes for elevated access requests with custom approve and deny actions
   resources :elevated_access_requests do
     member do
