@@ -13,79 +13,80 @@ The application provides role-based access control and security clearance featur
 - 🗃️ Scalable database schema for permission and access logs
 - ✅ RSpec testing with unit and system coverage using Capybara
 
-## Getting Started (Local Development)
-1. Clone the repository:
-   git clone https://github.com/willmaddock/final-project.git
-   cd final-project
+## Getting Started & Deployment
 
-2. Install dependencies:
-   bundle install
+# 1. Clone the repository
+git clone https://github.com/willmaddock/final-project.git
+cd final-project
 
-3. Set up the database:
-   rails db:create
-   rails db:migrate
-   rails db:seed
-   # Seeds include 52 user accounts generated with Faker for testing role-based access.
+# 2. Install dependencies
+bundle install
 
-4. Start the server:
-   rails server
+# 3. Reset and migrate the database
+bundle exec rails db:drop db:create db:migrate
 
-5. Visit the app at http://localhost:3000
+# 4. Seed the database with test data
+bundle exec rails db:seed
+# ✅ Creates 52 users, 52 profiles, 144 access logs, 10 access points, and 29 elevated access requests
 
-### 🔑 Default Login Credentials
-To access the app immediately after setup, use the following seeded account:
+# 5. Precompile assets (optional for local, required for deployment)
+bundle exec rake assets:precompile
 
-Login: logistics_manager@example.com  
-Password: password
+# 6. Start the Rails server
+rails server
+# Visit http://localhost:3000
 
-> Without this, it's impossible to use the app—so keep it handy!
+# 🔑 Default Login Credentials
+# Use this seeded account to access the app:
+# Email: logistics_manager@example.com
+# Password: password
 
-## Deployment (Render)
-This app is deployed on Render, a cloud platform for full-stack applications.
+# 🧪 Optional: Run seeds via controller route
+# Useful for resetting data during demos
+curl http://localhost:3000/run_seeds
 
-### 🔧 Setup Steps
-1. Ensure `pg` is used in the Gemfile for PostgreSQL.
-2. Add a Procfile:
-   web: bundle exec rails server
+# 🌐 Render Deployment Steps
 
-3. Set environment variables on Render:
-    - RAILS_MASTER_KEY (from config/master.key)
-    - DATABASE_URL (from Render’s PostgreSQL service)
+# Ensure PostgreSQL is used in Gemfile (pg)
+# Add a Procfile with:
+echo "web: bundle exec rails server" > Procfile
 
-### 🚀 Deploy Instructions
-- Connect your GitHub repo to Render
-- Use the following build and start commands:
-  bundle install && bundle exec rails assets:precompile
-  bundle exec rails server
+# Set environment variables on Render:
+# - RAILS_MASTER_KEY (from config/master.key)
+# - DATABASE_URL (from Render PostgreSQL)
 
-- Run migrations and seeds via Render Shell:
-  rails db:migrate
-  rails db:seed
+# Build & start commands for Render:
+bundle install && bundle exec rails assets:precompile
+bundle exec rails server
+
+# Run migrations and seeds via Render Shell:
+rails db:migrate
+rails db:seed
 
 ## Models and Relationships
-- User: Authenticates users and assigns roles (admin, shipping_agent, logistics_manager)
-- Profile: One-to-one with User; stores personal details
-- AccessPoint: Defines secure locations with access levels
-- AccessLog: Tracks access attempts; belongs to User and AccessPoint
+# - User: Authenticates users and assigns roles (admin, shipping_agent, logistics_manager)
+# - Profile: One-to-one with User; stores personal details
+# - AccessPoint: Defines secure locations with access levels
+# - AccessLog: Tracks access attempts; belongs to User and AccessPoint
 
 ## Testing
-- ✅ Unit tests for model validations and role logic (spec/models/user_spec.rb)
-- 🧪 System tests for user flows and access control (spec/system/agent_login_spec.rb, spec/system/restricted_area_access_spec.rb)
+# ✅ Unit tests for model validations and role logic (spec/models/user_spec.rb)
+# 🧪 System tests for user flows and access control (spec/system/agent_login_spec.rb, spec/system/restricted_area_access_spec.rb)
 
 ## UI and Accessibility
-- Built with Bootstrap for responsive design
-- ARIA labels, high-contrast modes, and keyboard navigation for accessibility
-- Inclusive design for users with autism, low vision, and motor disabilities
+# - Built with Bootstrap for responsive design
+# - ARIA labels, high-contrast modes, and keyboard navigation for accessibility
+# - Inclusive design for users with autism, low vision, and motor disabilities
 
 ## Sprint Details
-- Sprint 01: Initial setup, model scaffolding, and basic routing
-- Sprint 02: RBAC implementation, UI enhancements, and test coverage
-- Sprint 03: Accessibility features, seeded data, and deployment prep
+# - Sprint 01: Initial setup, model scaffolding, and basic routing
+# - Sprint 02: RBAC implementation, UI enhancements, and test coverage
+# - Sprint 03: Accessibility features, seeded data, and deployment prep
 
 ## Resources
-- MDN Web Docs: https://developer.mozilla.org
-- Ruby on Rails Guides: https://guides.rubyonrails.org
-- Accessibility Blog: https://accessibility.blog.gov.uk
+# - MDN Web Docs: https://developer.mozilla.org
+# - Ruby on Rails Guides: https://guides.rubyonrails.org
+# - Accessibility Blog: https://accessibility.blog.gov.uk
 
 ## License
-This project is for educational purposes only.
+# This project is for educational purposes only.

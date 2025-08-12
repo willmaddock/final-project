@@ -60,6 +60,9 @@ access_point_descriptions = [
   "Restricted roof access for maintenance only"
 ]
 
+# Path to default avatar image
+default_avatar_path = Rails.root.join("app/assets/images/default_avatar.png")
+
 # Create 10 access points
 10.times do
   AccessPoint.create!(
@@ -70,7 +73,7 @@ access_point_descriptions = [
   )
 end
 
-# Create specific admin and logistics manager users for presentation
+# Create specific admin and logistics manager users
 admin_user = User.create!(
   username: 'admin',
   full_name: 'Admin User',
@@ -101,14 +104,17 @@ logistics_manager_user = User.create!(
     location: Faker::Address.city
   )
 
-  # Attach an avatar image for each
   begin
     avatar_url = Faker::Avatar.image
     file = URI.open(avatar_url)
     profile.avatar.attach(io: file, filename: 'avatar.png', content_type: 'image/png')
-  rescue OpenURI::HTTPError => e
-    puts "Failed to fetch avatar for user #{user.id}: #{e.message}"
-    profile.avatar.attach(io: File.open(Rails.root.join('path_to_default_avatar.png')), filename: 'default_avatar.png', content_type: 'image/png')
+  rescue => e
+    puts "⚠️ Failed to fetch avatar for user #{user.id}: #{e.message}"
+    if File.exist?(default_avatar_path)
+      profile.avatar.attach(io: File.open(default_avatar_path), filename: 'default_avatar.png', content_type: 'image/png')
+    else
+      puts "⚠️ Default avatar not found at #{default_avatar_path}"
+    end
   end
 
   profile.save!
@@ -130,7 +136,7 @@ end
 
   profile = Profile.new(
     user: user,
-    bio: access_related_bios.sample,  # Select a random bio from the list
+    bio: access_related_bios.sample,
     location: Faker::Address.city
   )
 
@@ -138,9 +144,13 @@ end
     avatar_url = Faker::Avatar.image
     file = URI.open(avatar_url)
     profile.avatar.attach(io: file, filename: 'avatar.png', content_type: 'image/png')
-  rescue OpenURI::HTTPError => e
-    puts "Failed to fetch avatar for user #{user.id}: #{e.message}"
-    profile.avatar.attach(io: File.open(Rails.root.join('path_to_default_avatar.png')), filename: 'default_avatar.png', content_type: 'image/png')
+  rescue => e
+    puts "⚠️ Failed to fetch avatar for user #{user.id}: #{e.message}"
+    if File.exist?(default_avatar_path)
+      profile.avatar.attach(io: File.open(default_avatar_path), filename: 'default_avatar.png', content_type: 'image/png')
+    else
+      puts "⚠️ Default avatar not found at #{default_avatar_path}"
+    end
   end
 
   profile.save!
@@ -159,13 +169,13 @@ end
       ElevatedAccessRequest.create!(
         user: user,
         access_point_id: rand(1..10),
-        reason: access_request_reasons.sample,  # Select a random reason from the list
+        reason: access_request_reasons.sample,
         status: %w[pending approved denied].sample
       )
     end
   end
 end
 
-puts "Created #{User.count} users, #{Profile.count} profiles, and #{AccessLog.count} access logs."
-puts "Created #{AccessPoint.count} access points."
-puts "Created #{ElevatedAccessRequest.count} elevated access requests."
+puts "✅ Created #{User.count} users, #{Profile.count} profiles, and #{AccessLog.count} access logs."
+puts "✅ Created #{AccessPoint.count} access points."
+puts "✅ Created #{ElevatedAccessRequest.count} elevated access requests."

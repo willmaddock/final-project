@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  # ✅ One-time seed trigger route (secured via token)
+  get "/run_seeds", to: "seeds#run"
+
   # Routes for elevated access requests with custom approve and deny actions
   resources :elevated_access_requests do
     member do
