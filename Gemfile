@@ -61,9 +61,7 @@ group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
 
   # Add Faker for generating test data
-  group :development, :test, :production do
-    gem 'faker'
-  end
+  gem 'faker'
 
   # Add RSpec for testing
   gem 'rspec-rails', "~> 7.0"
