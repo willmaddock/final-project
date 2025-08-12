@@ -1,14 +1,26 @@
+# db/seeds.rb
 require 'faker'
 require 'open-uri'
 
-# Clear existing records if you want to reset the database (uncomment if needed)
+# ✅ Run migrations first if in production without shell access
+begin
+  ActiveRecord::MigrationContext.new(
+    File.join(Rails.root, "db/migrate"),
+    ActiveRecord::SchemaMigration
+  ).migrate
+  puts "✅ Migrations complete."
+rescue => e
+  puts "⚠️ Migration step skipped or failed: #{e.message}"
+end
+
+# --- OPTIONAL: Uncomment to reset the database before seeding ---
 # User.destroy_all
 # Profile.destroy_all
 # AccessLog.destroy_all
 # AccessPoint.destroy_all
 # ElevatedAccessRequest.destroy_all
 
-# Define lists for access-related bios and request reasons
+# Access-related bios and request reasons
 access_related_bios = [
   "Experienced in managing secure clearance zones.",
   "Skilled in overseeing restricted access areas.",
@@ -120,7 +132,7 @@ logistics_manager_user = User.create!(
   profile.save!
 end
 
-# Create additional random users with profiles, access logs, and elevated access requests
+# Create 50 random users with profiles, access logs, and elevated access requests
 50.times do
   password = Faker::Internet.password(min_length: 8)
   user = User.create!(
