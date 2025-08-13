@@ -2,6 +2,18 @@ Rails.application.routes.draw do
   # ✅ One-time seed trigger route (secured via token)
   get "/run_seeds", to: "seeds#run"
 
+  # 🚀 One-time migration trigger route (REMOVE after running in production)
+  if Rails.env.production?
+    get "/migrate" => proc {
+      begin
+        ActiveRecord::Base.connection.migration_context.migrate
+        [200, {}, ["Migrations complete!"]]
+      rescue => e
+        [500, {}, ["Migration failed: #{e.message}"]]
+      end
+    }
+  end
+
   # Routes for elevated access requests with custom approve and deny actions
   resources :elevated_access_requests do
     member do
