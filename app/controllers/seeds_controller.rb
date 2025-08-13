@@ -2,26 +2,23 @@
 class SeedsController < ApplicationController
   layout false
 
-  # Allow unauthenticated access to the seed endpoint (one-time use)
-  skip_before_action :authenticate_user!, only: :run, raise: false
-  skip_forgery_protection only: :run
-
   def run
-    token     = params[:token].to_s
-    expected  = ENV['SEED_TRIGGER_TOKEN'].to_s
+    expected_token = "maddock2025secure"
+    provided_token = params[:token].to_s
 
-    unless expected.present? && ActiveSupport::SecurityUtils.secure_compare(token, expected)
-      render plain: "❌ Unauthorized", status: :unauthorized and return
+    unless ActiveSupport::SecurityUtils.secure_compare(provided_token, expected_token)
+      render plain: "Unauthorized", status: :unauthorized
+      return
     end
 
-    # Run pending migrations (supports Rails 6/7)
-    ActiveRecord::Base.connection.migration_context.migrate
+    unless Rails.env.production?
+      render plain: "Not in production", status: :forbidden
+      return
+    end
 
-    # Run seeds
-    load Rails.root.join("db/seeds.rb")
-
-    render plain: "✅ Migrations and seeds ran successfully."
+    Rails.application.load_seed
+    render plain: "Seeds complete."
   rescue => e
-    render plain: "❌ Error: #{e.class} - #{e.message}", status: :internal_server_error
+    render plain: "Error: #{e.class} - #{e.message}", status: :internal_server_error
   end
 end

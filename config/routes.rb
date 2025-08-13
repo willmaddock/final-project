@@ -1,15 +1,24 @@
+# config/routes.rb
 Rails.application.routes.draw do
-  # ✅ One-time seed trigger route (secured via token)
+  # ✅ One-time seed trigger route (secured via token in SeedsController)
   get "/run_seeds", to: "seeds#run"
 
-  # 🚀 One-time migration trigger route (REMOVE after running in production)
+  # 🚀 One-time migration trigger route (secured via token; REMOVE after running in production)
   if Rails.env.production?
-    get "/migrate" => proc {
-      begin
-        ActiveRecord::Base.connection.migration_context.migrate
-        [200, {}, ["Migrations complete!"]]
-      rescue => e
-        [500, {}, ["Migration failed: #{e.message}"]]
+    get "/migrate", to: proc { |env|
+      req = Rack::Request.new(env)
+      provided = req.params["token"].to_s
+      expected = "maddock2025secure"
+
+      unless ActiveSupport::SecurityUtils.secure_compare(provided, expected)
+        [401, { "Content-Type" => "text/plain" }, ["Unauthorized"]]
+      else
+        begin
+          ActiveRecord::Base.connection.migration_context.migrate
+          [200, { "Content-Type" => "text/plain" }, ["Migrations complete!"]]
+        rescue => e
+          [500, { "Content-Type" => "text/plain" }, ["Migration failed: #{e.class} - #{e.message}"]]
+        end
       end
     }
   end
@@ -26,7 +35,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   # Custom route for admin user creation, to avoid conflict with Devise
-  post 'users/admin_create', to: 'users#create', as: 'admin_create_user'
+  post "users/admin_create", to: "users#create", as: "admin_create_user"
 
   # Resources for the application
   resources :access_logs
