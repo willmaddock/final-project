@@ -116,7 +116,7 @@ end
 end
 
 # Create additional random users with profiles, access logs, and elevated access requests
-15.times do
+30.times do
   # Generate unique username and email
   loop do
     @username = Faker::Internet.username

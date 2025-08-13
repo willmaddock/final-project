@@ -23,7 +23,7 @@ class Profile < ApplicationRecord
       errors.add(:avatar, "must be a JPEG, PNG, or GIF")
     end
 
-    if avatar.blob.byte_size > 5.megabytes
+    if avatar.blob.byte_size > 1.megabytes
       errors.add(:avatar, "must be smaller than 5MB")
     end
   end

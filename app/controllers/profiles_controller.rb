@@ -2,6 +2,7 @@ class ProfilesController < ApplicationController
   before_action :set_profile, only: %i[show edit update destroy]
   before_action :authorize_profile!, only: %i[edit update destroy]
   before_action :redirect_if_profile_exists, only: %i[new create]
+  before_action :check_avatar_upload, only: %i[create update]
 
   # GET /profiles
   def index
@@ -11,12 +12,9 @@ class ProfilesController < ApplicationController
     @profiles = @profiles.joins(:user).where('users.username = ?', params[:username]) if params[:username].present?
     @profiles = @profiles.where(location: params[:location]) if params[:location].present?
     @profiles = @profiles.joins(:user).where('users.email = ?', params[:email]) if params[:email].present?
-
-    render 'index'
   rescue StandardError => e
     flash.now[:alert] = "Failed to load profiles: #{e.message}"
     @profiles = []
-    render 'index'
   end
 
   # GET /profiles/1
@@ -60,10 +58,7 @@ class ProfilesController < ApplicationController
   # DELETE /profiles/1
   def destroy
     @profile.destroy
-    respond_to do |format|
-      format.html { redirect_to profiles_path, status: :see_other, notice: "Profile was successfully deleted." }
-      format.json { head :no_content }
-    end
+    redirect_to profiles_path, status: :see_other, notice: "Profile was successfully deleted."
   end
 
   private
@@ -84,19 +79,33 @@ class ProfilesController < ApplicationController
     end
   end
 
+  # ⛔ Pre-check avatar before model/ActiveStorage to avoid RAM spikes
+  def check_avatar_upload
+    if params[:profile] && params[:profile][:avatar].present?
+      avatar_file = params[:profile][:avatar]
+
+      if avatar_file.size > 1.megabyte
+        redirect_back fallback_location: request.referer || root_path,
+                      alert: "Avatar must be under 1MB" and return
+      end
+
+      allowed_types = %w[image/jpeg image/png image/gif]
+      unless allowed_types.include?(avatar_file.content_type)
+        redirect_back fallback_location: request.referer || root_path,
+                      alert: "Avatar must be a JPEG, PNG, or GIF" and return
+      end
+    end
+  end
+
   def profile_params
     params.require(:profile).permit(:bio, :location, :avatar)
   end
 
   def handle_response(success, render_action, notice)
-    respond_to do |format|
-      if success
-        format.html { redirect_to @profile, notice: notice }
-        format.json { render :show, status: :ok, location: @profile }
-      else
-        format.html { render render_action, status: :unprocessable_entity }
-        format.json { render json: @profile.errors, status: :unprocessable_entity }
-      end
+    if success
+      redirect_to @profile, notice: notice
+    else
+      render render_action, status: :unprocessable_entity
     end
   end
 end
