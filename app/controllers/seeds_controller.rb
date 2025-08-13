@@ -3,9 +3,10 @@ class SeedsController < ApplicationController
 
   def run
     if ENV["SEED_TRIGGER_TOKEN"].present? && params[:token] == ENV["SEED_TRIGGER_TOKEN"]
-      # Run pending migrations
+      # Run pending migrations (for free-tier Render without shell)
       ActiveRecord::MigrationContext.new(
-        File.join(Rails.root, "db/migrate"), ActiveRecord::SchemaMigration
+        File.join(Rails.root, "db/migrate"),
+        ActiveRecord::SchemaMigration
       ).migrate
 
       # Run seeds

@@ -2,17 +2,6 @@
 require 'faker'
 require 'open-uri'
 
-# ✅ Run migrations first if in production without shell access
-begin
-  ActiveRecord::MigrationContext.new(
-    File.join(Rails.root, "db/migrate"),
-    ActiveRecord::SchemaMigration
-  ).migrate
-  puts "✅ Migrations complete."
-rescue => e
-  puts "⚠️ Migration step skipped or failed: #{e.message}"
-end
-
 # --- OPTIONAL: Uncomment to reset the database before seeding ---
 # User.destroy_all
 # Profile.destroy_all
