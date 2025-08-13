@@ -56,12 +56,12 @@ gem 'kaminari'
 # add for thumbs up/down
 gem 'acts_as_votable', '~> 0.12.1'
 
+# Add Faker for seeding (temporary for production)
+gem 'faker'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ]
-
-  # Add Faker for generating test data
-  gem 'faker'
 
   # Add RSpec for testing
   gem 'rspec-rails', "~> 7.0"
