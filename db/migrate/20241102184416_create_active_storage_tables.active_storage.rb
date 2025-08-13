@@ -1,7 +1,6 @@
-# This migration comes from active_storage (originally 20170806125915)
+# db/migrate/20241102184416_create_active_storage_tables.active_storage.rb
 class CreateActiveStorageTables < ActiveRecord::Migration[7.1]
   def change
-    # Use Active Record's configured type for primary and foreign keys
     primary_key_type, foreign_key_type = primary_and_foreign_key_types
 
     create_table :active_storage_blobs, id: primary_key_type do |t|
@@ -47,11 +46,11 @@ class CreateActiveStorageTables < ActiveRecord::Migration[7.1]
   end
 
   private
-    def primary_and_foreign_key_types
-      config = Rails.configuration.generators
-      setting = config.options[config.orm][:primary_key_type]
-      primary_key_type = setting || :primary_key
-      foreign_key_type = setting || :bigint
-      [primary_key_type, foreign_key_type]
-    end
+  def primary_and_foreign_key_types
+    config = Rails.configuration.generators
+    setting = config.options[config.orm][:primary_key_type]
+    primary_key_type = setting || :primary_key
+    foreign_key_type = setting || :bigint
+    [primary_key_type, foreign_key_type]
+  end
 end
