@@ -11,11 +11,8 @@
 
   <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
 
-  <!-- Importmap for dev/test -->
+  <!-- Use Importmap in all environments -->
   <%= javascript_importmap_tags %>
-
-  <!-- Fallback for production asset pipeline -->
-  <%= javascript_include_tag "dark_mode_toggle", "data-turbo-track": "reload", defer: true %>
 </head>
 
 <body>
