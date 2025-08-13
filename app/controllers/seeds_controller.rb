@@ -3,8 +3,10 @@ class SeedsController < ApplicationController
   skip_before_action :authenticate_user!
 
   def migrate
-    # Run migrations
-    ActiveRecord::Migration.migrate(:up)
+    require 'rake'
+    Rake::Task.clear
+    Rails.application.load_tasks
+    Rake::Task['db:migrate'].invoke
     render plain: '✅ Migrations completed successfully.'
   end
 
